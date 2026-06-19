@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard | Career Growth Platform</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        
+        /* Login Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .login-box { background: var(--card); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .login-box input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .login-box button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        
+        /* Dashboard Layout */
+        .dashboard { display: none; max-width: 1400px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .stats { display: flex; gap: 20px; }
+        .stat-card { background: var(--card); padding: 15px 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .stat-card .label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 24px; font-weight: 700; margin-top: 5px; }
+        
+        /* Table Styles */
+        .table-container { background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #f8fafc; font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+        tr:hover { background: #f8fafc; }
+        
+        /* Status Badges */
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-progress { background: #dbeafe; color: #1e40af; }
+        .badge-completed { background: #dcfce7; color: #166534; }
+        
+        /* Action Buttons */
+        .btn-sm { padding: 6px 14px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .btn-view { background: #f1f5f9; color: var(--text); }
+        .btn-view:hover { background: #e2e8f0; }
+        .btn-complete { background: var(--primary); color: white; }
+        .btn-complete:hover { background: #1d4ed8; }
+        
+        /* Filter Bar */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <!-- Password Gate -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2>Staff Access</h2>
+            <p style="color:#64748b; font-size:14px;">Enter dashboard password</p>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button onclick="checkPassword()">Unlock Dashboard</button>
+            <p id="loginError" style="color:#991b1b; font-size:13px; margin-top:10px; display:none;">Incorrect password</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <h1>Client Management</h1>
+            <div class="stats">
+                <div class="stat-card"><div class="label">Total Clients</div><div class="value" id="totalCount">0</div></div>
+                <div class="stat-card"><div class="label">Pending</div><div class="value" id="pendingCount">0</div></div>
+                <div class="stat-card"><div class="label">Completed</div><div class="value" id="completedCount">0</div></div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterTable('all')">All</button>
+            <button class="filter-btn" onclick="filterTable('Pending')">Pending</button>
+            <button class="filter-btn" onclick="filterTable('In Progress')">In Progress</button>
+            <button class="filter-btn" onclick="filterTable('Completed')">Completed</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Service</th>
+                        <th>Blocker Tag</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ REPLACE WITH YOUR APPS SCRIPT WEB APP URL (SAME AS CLIENT FORM)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCDgRdMao0JdigJTfItU-vcBuFUIcEdckx3jF8iHSgPa2piuc07V20orWunYaZ6bnS/exec';
+        const DASHBOARD_PASSWORD = 'career2026'; // Change this!
+
+        let allClients = [];
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === DASHBOARD_PASSWORD) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadClients();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        async function loadClients() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getClients`, { method: 'GET' });
+                const data = await response.json();
+                allClients = data.clients || [];
+                renderTable(allClients);
+                updateStats();
+            } catch (err) {
+                console.error('Failed to load clients:', err);
+            }
+        }
+
+        function renderTable(clients) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clients.forEach(client => {
+                const statusClass = client.Status === 'Pending' ? 'badge-pending' : 
+                                   client.Status === 'In Progress' ? 'badge-progress' : 'badge-completed';
+                
+                const row = `
+                    <tr>
+                        <td><strong>${client['Client Name']}</strong><br><small style="color:#64748b">${client.Email}</small></td>
+                        <td>${client['Service Type']}</td>
+                        <td>${client['Blocker Tag']}</td>
+                        <td><span class="badge ${statusClass}">${client.Status}</span></td>
+                        <td>
+                            <button class="btn-sm btn-view" onclick="viewClient('${client.Email}')">View Details</button>
+                            ${client.Status !== 'Completed' ? `<button class="btn-sm btn-complete" onclick="markComplete('${client.Email}')">Mark Complete</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('totalCount').textContent = allClients.length;
+            document.getElementById('pendingCount').textContent = allClients.filter(c => c.Status === 'Pending').length;
+            document.getElementById('completedCount').textContent = allClients.filter(c => c.Status === 'Completed').length;
+        }
+
+        function filterTable(status) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (status === 'all') renderTable(allClients);
+            else renderTable(allClients.filter(c => c.Status === status));
+        }
+
+        async function markComplete(email) {
+            if (!confirm('Mark this client as completed?')) return;
+            
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'updateStatus', email: email, status: 'Completed' })
+            });
+            
+            loadClients(); // Refresh table
+        }
+
+        function viewClient(email) {
+            const client = allClients.find(c => c.Email === email);
+            alert(`Client: ${client['Client Name']}\nService: ${client['Service Type']}\nCurrent Role: ${client['Current Role']}\nTarget Role: ${client['Target Role']}\nNotes: ${client.Notes || 'No notes'}`);
+        }
+
+        // Allow Enter key on password
+        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+    </script>
+</body>
+</html>
