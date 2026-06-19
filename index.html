@@ -3,46 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ابدأ رحلتك المهنية</title>
+    <title>Mseer | ابدأ رحلتك المهنية</title>
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .container { background: var(--card); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 480px; text-align: center; }
-        h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
-        p.subtitle { margin: 0 0 30px; color: #64748b; font-size: 14px; line-height: 1.6; }
+        :root { 
+            --primary: #FF6B00; /* Mseer Orange */
+            --primary-hover: #e65c00;
+            --bg: #FFFDF5; /* Cream Background from Logo */
+            --card: #FFFFFF;
+            --text: #1A1A1A;
+            --border: #EAEAEA;
+        }
         
-        .form-group { margin-bottom: 20px; text-align: right; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-        input, select { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; box-sizing: border-box; outline: none; transition: all 0.2s; }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
         
-        .file-upload { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s; background: #f8fafc; }
-        .file-upload:hover { border-color: var(--primary); background: #eff6ff; }
+        .container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04); 
+            width: 100%; 
+            max-width: 550px; 
+            text-align: center; 
+            border-top: 5px solid var(--primary);
+        }
+
+        .logo { 
+            max-width: 140px; 
+            margin-bottom: 25px; 
+            display: inline-block;
+        }
+        
+        h2 { margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--text); }
+        p.subtitle { margin: 0 0 30px; color: #666; font-size: 14px; line-height: 1.6; }
+        
+        .form-group { margin-bottom: 18px; text-align: right; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #444; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            font-size: 14px; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: all 0.2s; 
+            background: #FAFAFA;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus { 
+            border-color: var(--primary); 
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1); 
+        }
+        
+        /* File Upload Styling */
+        .file-upload { 
+            border: 2px dashed #ddd; 
+            border-radius: 12px; 
+            padding: 25px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            background: #FAFAFA; 
+            margin-bottom: 10px;
+        }
+        .file-upload:hover { border-color: var(--primary); background: #FFF8F0; }
         .file-upload input { display: none; }
-        .file-label { color: #64748b; font-size: 14px; }
-        .file-name { margin-top: 8px; font-size: 13px; color: var(--primary); font-weight: 600; display: none; }
+        .file-label { color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .file-name { margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 600; display: none; }
         
-        button[type="submit"] { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        button[type="submit"]:hover { background: #1d4ed8; }
-        button[type="submit"]:disabled { background: #94a3b8; cursor: not-allowed; }
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            user-select: none;
+        }
+        .toggle-switch {
+            width: 40px; height: 22px; background: #ddd; border-radius: 20px; position: relative; margin: 0 10px; transition: 0.3s;
+        }
+        .toggle-switch::after {
+            content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s;
+        }
+        .toggle-active .toggle-switch { background: var(--primary); }
+        .toggle-active .toggle-switch::after { transform: translateX(18px); }
+        
+        /* Detailed Fields Section */
+        #manualFields { display: none; text-align: right; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-title { 
+            font-size: 15px; font-weight: 700; color: var(--primary); 
+            margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 1px solid #eee; 
+            text-align: right;
+        }
+        
+        button[type="submit"] { 
+            width: 100%; padding: 15px; 
+            background: var(--primary); color: white; 
+            border: none; border-radius: 10px; 
+            font-size: 16px; font-weight: 700; 
+            cursor: pointer; transition: background 0.2s; 
+            margin-top: 20px; 
+        }
+        button[type="submit"]:hover { background: var(--primary-hover); }
+        button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; }
         
         .status-msg { margin-top: 20px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; }
         .success { background: #dcfce7; color: #166534; display: block !important; }
         .error { background: #fee2e2; color: #991b1b; display: block !important; }
         .loading { opacity: 0.7; pointer-events: none; }
-        
-        .note { font-size: 12px; color: #94a3b8; margin-top: 6px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo -->
+        <img src="logo.jpeg" alt="Mseer Logo" class="logo">
+        
         <h2>ابدأ رحلتك المهنية</h2>
-        <p class="subtitle">أرسل لنا سيرتك الذاتية الحالية أو بياناتك الأساسية، وسنتواصل معك لتحديد المسار الأنسب لك</p>
+        <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
         
         <form id="intakeForm">
+            <!-- Basic Info (Always Visible) -->
             <div class="form-group">
                 <label>الاسم الكامل *</label>
-                <input type="text" name="name" required placeholder="مثال: أحمد محمد">
+                <input type="text" name="name" required placeholder="الاسم الثلاثي">
             </div>
             
             <div class="form-group">
@@ -60,14 +159,48 @@
                 <input type="text" name="city" placeholder="الرياض، جدة...">
             </div>
             
-            <div class="form-group">
-                <label>سيرتك الذاتية القديمة (إن وجدت)</label>
-                <div class="file-upload" onclick="document.getElementById('cvFile').click()">
-                    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
-                    <div class="file-label">📎 اضغط لرفع الملف (PDF / Word)</div>
-                    <div class="file-name" id="fileName"></div>
+            <!-- CV Upload Option -->
+            <div id="uploadSection">
+                <div class="form-group">
+                    <label>سيرتك الذاتية القديمة (إن وجدت)</label>
+                    <div class="file-upload" onclick="document.getElementById('cvFile').click()">
+                        <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
+                        <div class="file-label">📎 اضغط لرفع الملف (PDF / Word)</div>
+                        <div class="file-name" id="fileName"></div>
+                    </div>
                 </div>
-                <div class="note">إذا لم يكن لديك سيرة ذاتية، لا تقلق! سنساعدك في بنائها من الصفر</div>
+                
+                <!-- Toggle to Manual Entry -->
+                <div class="toggle-container" onclick="toggleManualEntry()">
+                    <span>ليس لدي سيرة ذاتية</span>
+                    <div class="toggle-switch" id="toggleSwitch"></div>
+                    <span>إدخال البيانات يدوياً</span>
+                </div>
+            </div>
+
+            <!-- Manual Entry Fields (Hidden by default) -->
+            <div id="manualFields">
+                <div class="section-title">المعلومات الشخصية الإضافية</div>
+                <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
+                
+                <div class="section-title">الشهادات الأكاديمية</div>
+                <div class="form-group"><label>الدرجة العلمية</label><input type="text" name="edu_degree" placeholder="بكالوريوس، ماجستير..."></div>
+                <div class="form-group"><label>جهة الإصدار & تاريخ التخرج</label><input type="text" name="edu_details" placeholder="جامعة الملك سعود - 2020"></div>
+                
+                <div class="section-title">الخبرات العملية</div>
+                <div class="form-group"><label>آخر مسمى وظيفي & جهة العمل</label><input type="text" name="exp_last" placeholder="مسوق رقمي - شركة الأفق"></div>
+                <div class="form-group"><label>تاريخ البداية والنهاية</label><input type="text" name="exp_dates" placeholder="يناير 2021 - حتى الآن"></div>
+                
+                <div class="section-title">التدريب والشهادات</div>
+                <div class="form-group"><label>أبرز الدورات أو التدريب</label><textarea name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea></div>
+                
+                <div class="section-title">المشاريع والعمل التطوعي</div>
+                <div class="form-group"><label>تفاصيل المشاريع أو التطوع</label><textarea name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea></div>
+                
+                <div class="form-group">
+                    <label>صور الشهادات والمرفقات (اختياري)</label>
+                    <input type="file" name="certsFile" accept="image/*,.pdf">
+                </div>
             </div>
             
             <button type="submit" id="submitBtn">إرسال الطلب</button>
@@ -77,8 +210,30 @@
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
+let isManual = false;
 
-// File name display
+// Toggle Logic
+function toggleManualEntry() {
+    isManual = !isManual;
+    const container = document.querySelector('.toggle-container');
+    const manualFields = document.getElementById('manualFields');
+    const uploadSection = document.getElementById('uploadSection');
+    
+    if (isManual) {
+        container.classList.add('toggle-active');
+        manualFields.style.display = 'block';
+        // Optional: Hide upload section when manual is active to reduce clutter
+        // uploadSection.style.opacity = '0.5'; 
+        // uploadSection.style.pointerEvents = 'none';
+    } else {
+        container.classList.remove('toggle-active');
+        manualFields.style.display = 'none';
+        // uploadSection.style.opacity = '1';
+        // uploadSection.style.pointerEvents = 'auto';
+    }
+}
+
+// File Name Display
 document.getElementById('cvFile').addEventListener('change', function(e) {
     const fileName = e.target.files[0]?.name;
     const display = document.getElementById('fileName');
@@ -86,38 +241,53 @@ document.getElementById('cvFile').addEventListener('change', function(e) {
     else { display.style.display = 'none'; }
 });
 
+// Form Submission
 document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     const msg = document.getElementById('statusMsg');
     const form = e.target;
     
-    btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+    btn.disabled = true; btn.textContent = 'جاري المعالجة...';
     msg.style.display = 'none'; form.classList.add('loading');
 
     const fd = new FormData(form);
     const data = Object.fromEntries(fd.entries());
     
-    // Build minimal payload for public form
+    // Combine manual fields into JSON strings for backend
+    const educationData = isManual ? JSON.stringify([{
+        degree: data.edu_degree || '', details: data.edu_details || ''
+    }]) : '';
+    
+    const expData = isManual ? JSON.stringify([{
+        role: data.exp_last || '', dates: data.exp_dates || ''
+    }]) : '';
+
     const payload = {
         name: data.name,
         phone: data.phone,
         email: data.email,
         city: data.city || '',
-        serviceType: 'Pending Diagnosis', // Staff assigns later
-        currentRole: '',
+        serviceType: 'Pending Diagnosis',
+        currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '',
         targetRole: '',
-        personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '' }),
-        education: '', experience: '', certifications: '', projects: '', attachments: data.cvFile?.name || ''
+        personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '', major: data.major || '' }),
+        education: educationData,
+        experience: expData,
+        certifications: data.training || '',
+        projects: data.projects || '',
+        attachments: data.cvFile?.name || data.certsFile?.name || ''
     };
 
     try {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
         msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
         msg.className = 'status-msg success';
-        form.reset(); document.getElementById('fileName').style.display = 'none';
+        form.reset(); 
+        document.getElementById('fileName').style.display = 'none';
+        if(isManual) toggleManualEntry(); // Reset view
     } catch { 
-        msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى أو التواصل مباشرة';
+        msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى';
         msg.className = 'status-msg error'; 
     }
     finally { btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); }
