@@ -3,65 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard | Career Growth Platform</title>
+    <title>Staff Dashboard | Mseer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2563eb; --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        :root { 
+            --primary: #FF6B00; 
+            --primary-hover: #E65C00;
+            --bg: #FFFDF5; 
+            --card: #FFFFFF; 
+            --text: #1A1A1A; 
+            --text-light: #666666;
+            --border: #F0EBE1; 
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 30px; }
         
         /* Login Overlay */
-        #loginOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .login-box { background: var(--card); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .login-box input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        .login-box button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        #loginOverlay { position: fixed; inset: 0; background: rgba(255,253,245,0.98); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .login-box { background: var(--card); padding: 45px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+        .login-box img { max-width: 100px; margin-bottom: 20px; border-radius: 8px; }
+        .login-box input { width: 100%; padding: 14px; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; font-family: 'Inter', sans-serif; }
+        .login-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255,107,0,0.1); }
+        .login-box button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .login-box button:hover { background: var(--primary-hover); }
         
         /* Dashboard Layout */
         .dashboard { display: none; max-width: 1400px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .header h1 { margin: 0; font-size: 24px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
+        .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
         .stats { display: flex; gap: 20px; }
-        .stat-card { background: var(--card); padding: 15px 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .stat-card .label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card .value { font-size: 24px; font-weight: 700; margin-top: 5px; }
+        .stat-card { background: var(--card); padding: 20px 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border); }
+        .stat-card .label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .stat-card .value { font-size: 28px; font-weight: 700; margin-top: 8px; color: var(--primary); }
         
         /* Table Styles */
-        .table-container { background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .table-container { background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
-        th { background: #f8fafc; font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
-        tr:hover { background: #f8fafc; }
+        th, td { padding: 20px 24px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #FAFAF8; font-weight: 600; color: var(--text-light); text-transform: uppercase; font-size: 11px; letter-spacing: 0.8px; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #FFFDF5; }
         
         /* Status Badges */
-        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
-        .badge-pending { background: #fef3c7; color: #92400e; }
-        .badge-progress { background: #dbeafe; color: #1e40af; }
-        .badge-completed { background: #dcfce7; color: #166534; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .badge-pending { background: #FEF3C7; color: #92400E; }
+        .badge-progress { background: #DBEAFE; color: #1E40AF; }
+        .badge-completed { background: #DCFCE7; color: #166534; }
         
         /* Action Buttons */
-        .btn-sm { padding: 6px 14px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .btn-view { background: #f1f5f9; color: var(--text); }
-        .btn-view:hover { background: #e2e8f0; }
+        .btn-sm { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; margin-right: 8px; font-family: 'Inter', sans-serif; }
+        .btn-view { background: #F5F5F4; color: var(--text); }
+        .btn-view:hover { background: #E7E5E4; }
         .btn-complete { background: var(--primary); color: white; }
-        .btn-complete:hover { background: #1d4ed8; }
+        .btn-complete:hover { background: var(--primary-hover); }
         
         /* Filter Bar */
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .filter-bar { display: flex; gap: 12px; margin-bottom: 25px; }
+        .filter-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.2s; font-family: 'Inter', sans-serif; }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     </style>
 </head>
 <body>
-    <!-- Password Gate -->
     <div id="loginOverlay">
         <div class="login-box">
-            <h2>Staff Access</h2>
-            <p style="color:#64748b; font-size:14px;">Enter dashboard password</p>
+            <img src="https://i.imgur.com/8XkRzJl.jpeg" alt="Mseer Logo">
+            <h2 style="margin:0 0 10px; font-size:20px;">Staff Access</h2>
+            <p style="color:var(--text-light); font-size:14px; margin:0;">Enter dashboard password</p>
             <input type="password" id="passwordInput" placeholder="Password">
             <button onclick="checkPassword()">Unlock Dashboard</button>
-            <p id="loginError" style="color:#991b1b; font-size:13px; margin-top:10px; display:none;">Incorrect password</p>
+            <p id="loginError" style="color:#991b1b; font-size:13px; margin-top:15px; display:none;">Incorrect password</p>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
     <div class="dashboard" id="dashboard">
         <div class="header">
             <h1>Client Management</h1>
@@ -96,10 +109,8 @@
     </div>
 
     <script>
-        // ⚠️ REPLACE WITH YOUR APPS SCRIPT WEB APP URL (SAME AS CLIENT FORM)
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
         const DASHBOARD_PASSWORD = '1234'; // Change this!
-
         let allClients = [];
 
         function checkPassword() {
@@ -120,22 +131,18 @@
                 allClients = data.clients || [];
                 renderTable(allClients);
                 updateStats();
-            } catch (err) {
-                console.error('Failed to load clients:', err);
-            }
+            } catch (err) { console.error('Failed to load clients:', err); }
         }
 
         function renderTable(clients) {
             const tbody = document.getElementById('clientTableBody');
             tbody.innerHTML = '';
-            
             clients.forEach(client => {
                 const statusClass = client.Status === 'Pending' ? 'badge-pending' : 
                                    client.Status === 'In Progress' ? 'badge-progress' : 'badge-completed';
-                
                 const row = `
                     <tr>
-                        <td><strong>${client['Client Name']}</strong><br><small style="color:#64748b">${client.Email}</small></td>
+                        <td><strong>${client['Client Name']}</strong><br><small style="color:var(--text-light)">${client.Email}</small></td>
                         <td>${client['Service Type']}</td>
                         <td>${client['Blocker Tag']}</td>
                         <td><span class="badge ${statusClass}">${client.Status}</span></td>
@@ -143,8 +150,7 @@
                             <button class="btn-sm btn-view" onclick="viewClient('${client.Email}')">View Details</button>
                             ${client.Status !== 'Completed' ? `<button class="btn-sm btn-complete" onclick="markComplete('${client.Email}')">Mark Complete</button>` : ''}
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
                 tbody.innerHTML += row;
             });
         }
@@ -158,22 +164,14 @@
         function filterTable(status) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
             if (status === 'all') renderTable(allClients);
             else renderTable(allClients.filter(c => c.Status === status));
         }
 
         async function markComplete(email) {
             if (!confirm('Mark this client as completed?')) return;
-            
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'updateStatus', email: email, status: 'Completed' })
-            });
-            
-            loadClients(); // Refresh table
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'updateStatus', email: email, status: 'Completed' }) });
+            loadClients();
         }
 
         function viewClient(email) {
@@ -181,10 +179,7 @@
             alert(`Client: ${client['Client Name']}\nService: ${client['Service Type']}\nCurrent Role: ${client['Current Role']}\nTarget Role: ${client['Target Role']}\nNotes: ${client.Notes || 'No notes'}`);
         }
 
-        // Allow Enter key on password
-        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPassword();
-        });
+        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
     </script>
 </body>
 </html>
