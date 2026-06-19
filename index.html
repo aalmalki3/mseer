@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mseer | ابدأ رحلتك المهنية</title>
+    <title>mseer | ابدأ رحلتك المهنية</title>
+    <!-- Enhanced Fonts: Tajawal for Arabic, Inter for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --primary: #FF6B00; /* Mseer Orange */
-            --primary-hover: #e65c00;
-            --bg: #FFFDF5; /* Cream Background from Logo */
+            --primary-hover: #E65C00;
+            --bg: #FFFDF5; /* Logo Cream Background */
             --card: #FFFFFF;
             --text: #1A1A1A;
-            --border: #EAEAEA;
+            --text-light: #666666;
+            --border: #F0EBE1;
         }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Tajawal', sans-serif; 
             background: var(--bg); 
             color: var(--text); 
             display: flex; 
@@ -29,116 +32,113 @@
         
         .container { 
             background: var(--card); 
-            padding: 40px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04); 
+            padding: 45px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
             width: 100%; 
-            max-width: 550px; 
+            max-width: 520px; 
             text-align: center; 
-            border-top: 5px solid var(--primary);
         }
 
         .logo { 
-            max-width: 140px; 
-            margin-bottom: 25px; 
+            max-width: 130px; 
+            margin-bottom: 30px; 
             display: inline-block;
+            border-radius: 12px; /* Softens the rectangular crop */
         }
         
-        h2 { margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--text); }
-        p.subtitle { margin: 0 0 30px; color: #666; font-size: 14px; line-height: 1.6; }
+        h2 { margin: 0 0 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        p.subtitle { margin: 0 0 35px; color: var(--text-light); font-size: 15px; line-height: 1.7; }
         
-        .form-group { margin-bottom: 18px; text-align: right; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #444; }
+        .form-group { margin-bottom: 20px; text-align: right; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: var(--text); }
         input, select, textarea { 
             width: 100%; 
-            padding: 12px 15px; 
+            padding: 14px 16px; 
             border: 1px solid var(--border); 
-            border-radius: 10px; 
-            font-size: 14px; 
+            border-radius: 12px; 
+            font-size: 15px; 
             box-sizing: border-box; 
             outline: none; 
-            transition: all 0.2s; 
-            background: #FAFAFA;
-            font-family: inherit;
+            transition: all 0.2s ease; 
+            background: #FAFAF8;
+            font-family: 'Tajawal', sans-serif;
         }
         input:focus, select:focus, textarea:focus { 
             border-color: var(--primary); 
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1); 
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08); 
         }
         
-        /* File Upload Styling */
+        /* File Upload */
         .file-upload { 
-            border: 2px dashed #ddd; 
-            border-radius: 12px; 
+            border: 2px dashed #E5E0D8; 
+            border-radius: 14px; 
             padding: 25px; 
             cursor: pointer; 
             transition: all 0.2s; 
-            background: #FAFAFA; 
-            margin-bottom: 10px;
+            background: #FAFAF8; 
+            margin-bottom: 15px;
         }
         .file-upload:hover { border-color: var(--primary); background: #FFF8F0; }
         .file-upload input { display: none; }
-        .file-label { color: #666; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .file-name { margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 600; display: none; }
+        .file-label { color: var(--text-light); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .file-name { margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 700; display: none; }
         
         /* Toggle Switch */
         .toggle-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            font-size: 14px;
-            color: #666;
-            cursor: pointer;
-            user-select: none;
+            display: flex; align-items: center; justify-content: center;
+            margin: 25px 0; font-size: 14px; color: var(--text-light);
+            cursor: pointer; user-select: none; gap: 12px;
         }
         .toggle-switch {
-            width: 40px; height: 22px; background: #ddd; border-radius: 20px; position: relative; margin: 0 10px; transition: 0.3s;
+            width: 44px; height: 24px; background: #E5E0D8; border-radius: 20px; 
+            position: relative; transition: 0.3s;
         }
         .toggle-switch::after {
-            content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s;
+            content: ''; position: absolute; top: 3px; left: 3px; 
+            width: 18px; height: 18px; background: white; border-radius: 50%; 
+            transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .toggle-active .toggle-switch { background: var(--primary); }
-        .toggle-active .toggle-switch::after { transform: translateX(18px); }
+        .toggle-active .toggle-switch::after { transform: translateX(20px); }
         
-        /* Detailed Fields Section */
-        #manualFields { display: none; text-align: right; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Manual Fields Animation */
+        #manualFields { display: none; text-align: right; animation: slideDown 0.3s ease forwards; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
         .section-title { 
             font-size: 15px; font-weight: 700; color: var(--primary); 
-            margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 1px solid #eee; 
+            margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border); 
             text-align: right;
         }
         
         button[type="submit"] { 
-            width: 100%; padding: 15px; 
+            width: 100%; padding: 16px; 
             background: var(--primary); color: white; 
-            border: none; border-radius: 10px; 
+            border: none; border-radius: 12px; 
             font-size: 16px; font-weight: 700; 
-            cursor: pointer; transition: background 0.2s; 
-            margin-top: 20px; 
+            cursor: pointer; transition: all 0.2s; 
+            margin-top: 25px; font-family: 'Tajawal', sans-serif;
         }
-        button[type="submit"]:hover { background: var(--primary-hover); }
-        button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; }
+        button[type="submit"]:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         
-        .status-msg { margin-top: 20px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; }
-        .success { background: #dcfce7; color: #166534; display: block !important; }
-        .error { background: #fee2e2; color: #991b1b; display: block !important; }
+        .status-msg { margin-top: 20px; padding: 14px; border-radius: 10px; font-size: 14px; display: none; font-weight: 500; }
+        .success { background: #DCFCE7; color: #166534; display: block !important; }
+        .error { background: #FEE2E2; color: #991B1B; display: block !important; }
         .loading { opacity: 0.7; pointer-events: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo -->
-        <img src="logo.jpeg" alt="Mseer Logo" class="logo">
+        <!-- Cropped Logo on Brand Background -->
+        <img src="https://i.imgur.com/8XkRzJl.jpeg" alt="Mseer Logo" class="logo">
         
         <h2>ابدأ رحلتك المهنية</h2>
         <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
         
         <form id="intakeForm">
-            <!-- Basic Info (Always Visible) -->
             <div class="form-group">
                 <label>الاسم الكامل *</label>
                 <input type="text" name="name" required placeholder="الاسم الثلاثي">
@@ -146,12 +146,12 @@
             
             <div class="form-group">
                 <label>رقم التواصل (واتساب) *</label>
-                <input type="tel" name="phone" required placeholder="05xxxxxxxx">
+                <input type="tel" name="phone" required placeholder="05xxxxxxxx" style="direction: ltr; text-align: right;">
             </div>
             
             <div class="form-group">
                 <label>البريد الإلكتروني *</label>
-                <input type="email" name="email" required placeholder="example@email.com">
+                <input type="email" name="email" required placeholder="example@email.com" style="direction: ltr; text-align: right;">
             </div>
             
             <div class="form-group">
@@ -159,7 +159,6 @@
                 <input type="text" name="city" placeholder="الرياض، جدة...">
             </div>
             
-            <!-- CV Upload Option -->
             <div id="uploadSection">
                 <div class="form-group">
                     <label>سيرتك الذاتية القديمة (إن وجدت)</label>
@@ -170,7 +169,6 @@
                     </div>
                 </div>
                 
-                <!-- Toggle to Manual Entry -->
                 <div class="toggle-container" onclick="toggleManualEntry()">
                     <span>ليس لدي سيرة ذاتية</span>
                     <div class="toggle-switch" id="toggleSwitch"></div>
@@ -178,7 +176,6 @@
                 </div>
             </div>
 
-            <!-- Manual Entry Fields (Hidden by default) -->
             <div id="manualFields">
                 <div class="section-title">المعلومات الشخصية الإضافية</div>
                 <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
@@ -212,28 +209,20 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
 let isManual = false;
 
-// Toggle Logic
 function toggleManualEntry() {
     isManual = !isManual;
     const container = document.querySelector('.toggle-container');
     const manualFields = document.getElementById('manualFields');
-    const uploadSection = document.getElementById('uploadSection');
     
     if (isManual) {
         container.classList.add('toggle-active');
         manualFields.style.display = 'block';
-        // Optional: Hide upload section when manual is active to reduce clutter
-        // uploadSection.style.opacity = '0.5'; 
-        // uploadSection.style.pointerEvents = 'none';
     } else {
         container.classList.remove('toggle-active');
         manualFields.style.display = 'none';
-        // uploadSection.style.opacity = '1';
-        // uploadSection.style.pointerEvents = 'auto';
     }
 }
 
-// File Name Display
 document.getElementById('cvFile').addEventListener('change', function(e) {
     const fileName = e.target.files[0]?.name;
     const display = document.getElementById('fileName');
@@ -241,7 +230,6 @@ document.getElementById('cvFile').addEventListener('change', function(e) {
     else { display.style.display = 'none'; }
 });
 
-// Form Submission
 document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -254,28 +242,14 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     const fd = new FormData(form);
     const data = Object.fromEntries(fd.entries());
     
-    // Combine manual fields into JSON strings for backend
-    const educationData = isManual ? JSON.stringify([{
-        degree: data.edu_degree || '', details: data.edu_details || ''
-    }]) : '';
-    
-    const expData = isManual ? JSON.stringify([{
-        role: data.exp_last || '', dates: data.exp_dates || ''
-    }]) : '';
+    const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
+    const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
 
     const payload = {
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
-        city: data.city || '',
-        serviceType: 'Pending Diagnosis',
-        currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '',
-        targetRole: '',
+        name: data.name, phone: data.phone, email: data.email, city: data.city || '',
+        serviceType: 'Pending Diagnosis', currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', targetRole: '',
         personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '', major: data.major || '' }),
-        education: educationData,
-        experience: expData,
-        certifications: data.training || '',
-        projects: data.projects || '',
+        education: educationData, experience: expData, certifications: data.training || '', projects: data.projects || '',
         attachments: data.cvFile?.name || data.certsFile?.name || ''
     };
 
@@ -283,14 +257,14 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
         msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
         msg.className = 'status-msg success';
-        form.reset(); 
-        document.getElementById('fileName').style.display = 'none';
-        if(isManual) toggleManualEntry(); // Reset view
+        form.reset(); document.getElementById('fileName').style.display = 'none';
+        if(isManual) toggleManualEntry();
     } catch { 
         msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى';
         msg.className = 'status-msg error'; 
+    } finally { 
+        btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); 
     }
-    finally { btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); }
 });
 </script>
 </body>
