@@ -1,245 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Growth Platform</title>
+    <title>ابدأ رحلتك المهنية</title>
     <style>
         :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .container { background: var(--card); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 560px; position: relative; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { background: var(--card); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 480px; text-align: center; }
+        h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+        p.subtitle { margin: 0 0 30px; color: #64748b; font-size: 14px; line-height: 1.6; }
         
-        /* Language Toggle */
-        .lang-toggle { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--primary); user-select: none; }
-        .lang-toggle:hover { text-decoration: underline; }
-        
-        h2 { margin: 0 0 8px; font-size: 24px; font-weight: 700; text-align: center; }
-        p.subtitle { margin: 0 0 30px; color: #64748b; text-align: center; font-size: 14px; }
-        
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; text-align: right; }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; box-sizing: border-box; transition: all 0.2s; outline: none; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-        textarea { resize: vertical; min-height: 80px; }
+        input, select { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; box-sizing: border-box; outline: none; transition: all 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
         
-        /* Repeater Styles */
-        .repeater-item { background: #f8fafc; padding: 16px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #e2e8f0; position: relative; }
-        .remove-btn { position: absolute; top: 12px; right: 12px; background: #fee2e2; color: #991b1b; border: none; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; }
-        .add-btn { width: auto; padding: 8px 16px; background: transparent; border: 1px dashed #cbd5e1; color: #64748b; font-size: 13px; margin-top: 4px; }
-        .add-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+        .file-upload { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s; background: #f8fafc; }
+        .file-upload:hover { border-color: var(--primary); background: #eff6ff; }
+        .file-upload input { display: none; }
+        .file-label { color: #64748b; font-size: 14px; }
+        .file-name { margin-top: 8px; font-size: 13px; color: var(--primary); font-weight: 600; display: none; }
         
         button[type="submit"] { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
         button[type="submit"]:hover { background: #1d4ed8; }
         button[type="submit"]:disabled { background: #94a3b8; cursor: not-allowed; }
         
-        .status-msg { margin-top: 20px; padding: 12px; border-radius: 8px; font-size: 14px; text-align: center; display: none; }
+        .status-msg { margin-top: 20px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; }
         .success { background: #dcfce7; color: #166534; display: block !important; }
         .error { background: #fee2e2; color: #991b1b; display: block !important; }
         .loading { opacity: 0.7; pointer-events: none; }
         
-        .section-title { font-size: 16px; font-weight: 700; margin: 30px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+        .note { font-size: 12px; color: #94a3b8; margin-top: 6px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="lang-toggle" onclick="toggleLang()" id="langBtn">العربية</div>
-        
-        <h2 id="formTitle">Start Your Career Journey</h2>
-        <p class="subtitle" id="formSubtitle">Professional CV & Strategic Career Planning</p>
+        <h2>ابدأ رحلتك المهنية</h2>
+        <p class="subtitle">أرسل لنا سيرتك الذاتية الحالية أو بياناتك الأساسية، وسنتواصل معك لتحديد المسار الأنسب لك</p>
         
         <form id="intakeForm">
-            <!-- Personal Info -->
             <div class="form-group">
-                <label id="lblName">Full Name</label>
-                <input type="text" name="name" required>
+                <label>الاسم الكامل *</label>
+                <input type="text" name="name" required placeholder="مثال: أحمد محمد">
             </div>
+            
             <div class="form-group">
-                <label id="lblEmail">Email Address</label>
-                <input type="email" name="email" required>
+                <label>رقم التواصل (واتساب) *</label>
+                <input type="tel" name="phone" required placeholder="05xxxxxxxx">
             </div>
+            
             <div class="form-group">
-                <label id="lblPhone">Phone Number</label>
-                <input type="tel" name="phone">
+                <label>البريد الإلكتروني *</label>
+                <input type="email" name="email" required placeholder="example@email.com">
             </div>
+            
             <div class="form-group">
-                <label id="lblCity">City</label>
-                <input type="text" name="city">
+                <label>المدينة</label>
+                <input type="text" name="city" placeholder="الرياض، جدة...">
             </div>
-
-            <!-- Service Selection -->
+            
             <div class="form-group">
-                <label id="lblService">Select Service</label>
-                <select name="serviceType" required>
-                    <option value="" disabled selected id="optChoose">Choose your path...</option>
-                    <option value="Launch Pad">🚀 Launch Pad (New to Market)</option>
-                    <option value="Growth Accelerator">📈 Growth Accelerator (Seeking Better)</option>
-                    <option value="Pivot Blueprint">🔄 Pivot Blueprint (Career Change)</option>
-                </select>
+                <label>سيرتك الذاتية القديمة (إن وجدت)</label>
+                <div class="file-upload" onclick="document.getElementById('cvFile').click()">
+                    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
+                    <div class="file-label">📎 اضغط لرفع الملف (PDF / Word)</div>
+                    <div class="file-name" id="fileName"></div>
+                </div>
+                <div class="note">إذا لم يكن لديك سيرة ذاتية، لا تقلق! سنساعدك في بنائها من الصفر</div>
             </div>
-
-            <div class="form-group">
-                <label id="lblCurrentRole">Current Job Title</label>
-                <input type="text" name="currentRole">
-            </div>
-            <div class="form-group">
-                <label id="lblTargetRole">Target Job Title</label>
-                <input type="text" name="targetRole">
-            </div>
-
-            <!-- Education Repeater -->
-            <div class="section-title" id="secEducation">Education</div>
-            <div id="educationRepeater"></div>
-            <button type="button" class="add-btn" onclick="addEducation()">+ Add Education</button>
-
-            <!-- Experience Repeater -->
-            <div class="section-title" id="secExperience">Work Experience</div>
-            <div id="experienceRepeater"></div>
-            <button type="button" class="add-btn" onclick="addExperience()">+ Add Experience</button>
-
-            <!-- Certifications -->
-            <div class="section-title" id="secCerts">Certifications & Courses</div>
-            <div class="form-group">
-                <textarea name="certifications" id="txtCerts" placeholder="List certifications, courses, achievements..."></textarea>
-            </div>
-
-            <!-- Projects -->
-            <div class="section-title" id="secProjects">Projects</div>
-            <div class="form-group">
-                <textarea name="projects" id="txtProjects" placeholder="Describe key projects or graduation project..."></textarea>
-            </div>
-
-            <!-- Attachments -->
-            <div class="form-group">
-                <label id="lblAttachments">Attachments Link (Google Drive/Dropbox)</label>
-                <input type="url" name="attachments" placeholder="https://...">
-            </div>
-
-            <button type="submit" id="submitBtn">Submit Request</button>
+            
+            <button type="submit" id="submitBtn">إرسال الطلب</button>
             <div id="statusMsg" class="status-msg"></div>
         </form>
     </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
-let currentLang = 'en';
 
-const i18n = {
-    en: {
-        formTitle: "Start Your Career Journey", subtitle: "Professional CV & Strategic Career Planning",
-        lblName: "Full Name", lblEmail: "Email Address", lblPhone: "Phone Number", lblCity: "City",
-        lblService: "Select Service", optChoose: "Choose your path...",
-        lblCurrentRole: "Current Job Title", lblTargetRole: "Target Job Title",
-        secEducation: "Education", secExperience: "Work Experience", secCerts: "Certifications & Courses",
-        secProjects: "Projects", lblAttachments: "Attachments Link (Google Drive/Dropbox)",
-        submitBtn: "Submit Request", success: "✅ Request received! Check your email shortly.",
-        error: "❌ Something went wrong. Please try again.", processing: "Processing...",
-        addEdu: "+ Add Education", addExp: "+ Add Experience",
-        eduDegree: "Degree", eduMajor: "Major/Specialization", eduInst: "Institution",
-        eduGradDate: "Graduation Date (MM/YYYY)", eduGPA: "GPA (Optional)",
-        expTitle: "Job Title", expCompany: "Company", expStart: "Start Date (MM/YYYY)",
-        expEnd: "End Date (MM/YYYY or Present)", txtCertsPH: "List certifications, courses, achievements...",
-        txtProjPH: "Describe key projects or graduation project..."
-    },
-    ar: {
-        formTitle: "ابدأ رحلتك المهنية", subtitle: "سيرة ذاتية احترافية وتخطيط استراتيجي للمسار الوظيفي",
-        lblName: "الاسم الكامل", lblEmail: "البريد الإلكتروني", lblPhone: "رقم التواصل", lblCity: "المدينة",
-        lblService: "اختر الخدمة", optChoose: "اختر مسارك...",
-        lblCurrentRole: "المسمى الوظيفي الحالي", lblTargetRole: "المسمى الوظيفي المستهدف",
-        secEducation: "الشهادات الأكاديمية", secExperience: "الخبرات العملية", secCerts: "الشهادات والدورات",
-        secProjects: "المشاريع", lblAttachments: "رابط المرفقات (Google Drive/Dropbox)",
-        submitBtn: "إرسال الطلب", success: "✅ تم الاستلام! تحقق من بريدك الإلكتروني قريباً.",
-        error: "❌ حدث خطأ. يرجى المحاولة مرة أخرى.", processing: "جاري المعالجة...",
-        addEdu: "+ إضافة شهادة", addExp: "+ إضافة خبرة",
-        eduDegree: "الدرجة العلمية", eduMajor: "التخصص", eduInst: "جهة الإصدار",
-        eduGradDate: "تاريخ التخرج (شهر/سنة)", eduGPA: "المعدل (إن وجد)",
-        expTitle: "المسمى الوظيفي", expCompany: "جهة العمل", expStart: "تاريخ البداية (شهر/سنة)",
-        expEnd: "تاريخ النهاية (شهر/سنة أو حالياً)", txtCertsPH: "اذكر الشهادات والدورات والإنجازات...",
-        txtProjPH: "صف المشاريع السابقة أو مشروع التخرج..."
-    }
-};
-
-function toggleLang() {
-    currentLang = currentLang === 'en' ? 'ar' : 'en';
-    document.getElementById('langBtn').textContent = currentLang === 'en' ? 'العربية' : 'English';
-    document.documentElement.lang = currentLang;
-    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-    
-    const t = i18n[currentLang];
-    document.getElementById('formTitle').textContent = t.formTitle;
-    document.getElementById('formSubtitle').textContent = t.subtitle;
-    document.getElementById('lblName').textContent = t.lblName;
-    document.getElementById('lblEmail').textContent = t.lblEmail;
-    document.getElementById('lblPhone').textContent = t.lblPhone;
-    document.getElementById('lblCity').textContent = t.lblCity;
-    document.getElementById('lblService').textContent = t.lblService;
-    document.getElementById('optChoose').textContent = t.optChoose;
-    document.getElementById('lblCurrentRole').textContent = t.lblCurrentRole;
-    document.getElementById('lblTargetRole').textContent = t.lblTargetRole;
-    document.getElementById('secEducation').textContent = t.secEducation;
-    document.getElementById('secExperience').textContent = t.secExperience;
-    document.getElementById('secCerts').textContent = t.secCerts;
-    document.getElementById('secProjects').textContent = t.secProjects;
-    document.getElementById('lblAttachments').textContent = t.lblAttachments;
-    document.getElementById('submitBtn').textContent = t.submitBtn;
-    document.getElementById('txtCerts').placeholder = t.txtCertsPH;
-    document.getElementById('txtProjects').placeholder = t.txtProjPH;
-    
-    // Update buttons and repeater labels
-    document.querySelectorAll('.add-btn').forEach(btn => {
-        if (btn.onclick?.toString().includes('Education')) btn.textContent = t.addEdu;
-        else if (btn.onclick?.toString().includes('Experience')) btn.textContent = t.addExp;
-    });
-    refreshRepeaterLabels();
-}
-
-function refreshRepeaterLabels() {
-    const t = i18n[currentLang];
-    document.querySelectorAll('#educationRepeater .repeater-item').forEach(item => {
-        item.querySelector('[data-label="degree"]').textContent = t.eduDegree;
-        item.querySelector('[data-label="major"]').textContent = t.eduMajor;
-        item.querySelector('[data-label="inst"]').textContent = t.eduInst;
-        item.querySelector('[data-label="gradDate"]').textContent = t.eduGradDate;
-        item.querySelector('[data-label="gpa"]').textContent = t.eduGPA;
-    });
-    document.querySelectorAll('#experienceRepeater .repeater-item').forEach(item => {
-        item.querySelector('[data-label="title"]').textContent = t.expTitle;
-        item.querySelector('[data-label="company"]').textContent = t.expCompany;
-        item.querySelector('[data-label="start"]').textContent = t.expStart;
-        item.querySelector('[data-label="end"]').textContent = t.expEnd;
-    });
-}
-
-function addEducation() {
-    const t = i18n[currentLang];
-    const div = document.createElement('div');
-    div.className = 'repeater-item';
-    div.innerHTML = `
-        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-        <div class="form-group"><label data-label="degree">${t.eduDegree}</label><input type="text" name="edu_degree[]" required></div>
-        <div class="form-group"><label data-label="major">${t.eduMajor}</label><input type="text" name="edu_major[]"></div>
-        <div class="form-group"><label data-label="inst">${t.eduInst}</label><input type="text" name="edu_inst[]"></div>
-        <div class="form-group"><label data-label="gradDate">${t.eduGradDate}</label><input type="text" name="edu_gradDate[]" placeholder="MM/YYYY"></div>
-        <div class="form-group"><label data-label="gpa">${t.eduGPA}</label><input type="text" name="edu_gpa[]"></div>
-    `;
-    document.getElementById('educationRepeater').appendChild(div);
-}
-
-function addExperience() {
-    const t = i18n[currentLang];
-    const div = document.createElement('div');
-    div.className = 'repeater-item';
-    div.innerHTML = `
-        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-        <div class="form-group"><label data-label="title">${t.expTitle}</label><input type="text" name="exp_title[]" required></div>
-        <div class="form-group"><label data-label="company">${t.expCompany}</label><input type="text" name="exp_company[]"></div>
-        <div class="form-group"><label data-label="start">${t.expStart}</label><input type="text" name="exp_start[]" placeholder="MM/YYYY"></div>
-        <div class="form-group"><label data-label="end">${t.expEnd}</label><input type="text" name="exp_end[]" placeholder="MM/YYYY"></div>
-    `;
-    document.getElementById('experienceRepeater').appendChild(div);
-}
-
-// Initialize with one education and one experience row
-window.addEventListener('DOMContentLoaded', () => { addEducation(); addExperience(); });
+// File name display
+document.getElementById('cvFile').addEventListener('change', function(e) {
+    const fileName = e.target.files[0]?.name;
+    const display = document.getElementById('fileName');
+    if (fileName) { display.textContent = `✅ ${fileName}`; display.style.display = 'block'; }
+    else { display.style.display = 'none'; }
+});
 
 document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -247,52 +92,35 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     const msg = document.getElementById('statusMsg');
     const form = e.target;
     
-    btn.disabled = true; btn.textContent = i18n[currentLang].processing;
+    btn.disabled = true; btn.textContent = 'جاري الإرسال...';
     msg.style.display = 'none'; form.classList.add('loading');
 
     const fd = new FormData(form);
     const data = Object.fromEntries(fd.entries());
     
-    // Build structured arrays from repeater fields
-    const education = [];
-    for (let i = 0; i < (data['edu_degree[]']?.length ? data['edu_degree[]'].length : (data['edu_degree[]'] ? 1 : 0)); i++) {
-        education.push({
-            degree: Array.isArray(data['edu_degree[]']) ? data['edu_degree[]'][i] : data['edu_degree[]'],
-            major: Array.isArray(data['edu_major[]']) ? data['edu_major[]'][i] : data['edu_major[]'],
-            institution: Array.isArray(data['edu_inst[]']) ? data['edu_inst[]'][i] : data['edu_inst[]'],
-            gradDate: Array.isArray(data['edu_gradDate[]']) ? data['edu_gradDate[]'][i] : data['edu_gradDate[]'],
-            gpa: Array.isArray(data['edu_gpa[]']) ? data['edu_gpa[]'][i] : data['edu_gpa[]']
-        });
-    }
-    
-    const experience = [];
-    for (let i = 0; i < (data['exp_title[]']?.length ? data['exp_title[]'].length : (data['exp_title[]'] ? 1 : 0)); i++) {
-        experience.push({
-            title: Array.isArray(data['exp_title[]']) ? data['exp_title[]'][i] : data['exp_title[]'],
-            company: Array.isArray(data['exp_company[]']) ? data['exp_company[]'][i] : data['exp_company[]'],
-            startDate: Array.isArray(data['exp_start[]']) ? data['exp_start[]'][i] : data['exp_start[]'],
-            endDate: Array.isArray(data['exp_end[]']) ? data['exp_end[]'][i] : data['exp_end[]']
-        });
-    }
-
+    // Build minimal payload for public form
     const payload = {
-        name: data.name, email: data.email, phone: data.phone || '', city: data.city || '',
-        serviceType: data.serviceType, currentRole: data.currentRole || '', targetRole: data.targetRole || '',
-        personalInfo: JSON.stringify({ name: data.name, email: data.email, phone: data.phone || '', city: data.city || '' }),
-        education: JSON.stringify(education),
-        experience: JSON.stringify(experience),
-        certifications: data.certifications || '',
-        projects: data.projects || '',
-        attachments: data.attachments || ''
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        city: data.city || '',
+        serviceType: 'Pending Diagnosis', // Staff assigns later
+        currentRole: '',
+        targetRole: '',
+        personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '' }),
+        education: '', experience: '', certifications: '', projects: '', attachments: data.cvFile?.name || ''
     };
 
     try {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        msg.textContent = i18n[currentLang].success; msg.className = 'status-msg success';
-        form.reset(); document.getElementById('educationRepeater').innerHTML = ''; document.getElementById('experienceRepeater').innerHTML = '';
-        addEducation(); addExperience();
-    } catch { msg.textContent = i18n[currentLang].error; msg.className = 'status-msg error'; }
-    finally { btn.disabled = false; btn.textContent = i18n[currentLang].submitBtn; form.classList.remove('loading'); }
+        msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
+        msg.className = 'status-msg success';
+        form.reset(); document.getElementById('fileName').style.display = 'none';
+    } catch { 
+        msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى أو التواصل مباشرة';
+        msg.className = 'status-msg error'; 
+    }
+    finally { btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); }
 });
 </script>
 </body>
