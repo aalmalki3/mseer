@@ -30,22 +30,22 @@
             box-sizing: border-box; 
         }
         
-        .container { 
-            background: var(--card); 
-            padding: 45px 40px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
-            width: 100%; 
-            max-width: 520px; 
-            text-align: center; 
-        }
+        .logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
 
-        .logo { 
-            max-width: 130px; 
-            margin-bottom: 30px; 
-            display: inline-block;
-            border-radius: 12px; /* Softens the rectangular crop */
-        }
+.logo {
+  max-width: 130px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  /* Ensures logo blends with page background even if JPEG has slight white edge */
+  background: var(--bg);
+  padding: 2px; /* masks any 1px white halo from JPEG */
+  box-sizing: border-box;
+}
         
         h2 { margin: 0 0 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
         p.subtitle { margin: 0 0 35px; color: var(--text-light); font-size: 15px; line-height: 1.7; }
@@ -131,10 +131,20 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Cropped Logo on Brand Background -->
-        <img src="https://i.imgur.com/8XkRzJl.jpeg" alt="Mseer Logo" class="logo">
-        
+ <div class="container">
+  <!-- Logo: centered, with background match -->
+  <div class="logo-container">
+    <img src="logo.jpeg" alt="Mseer Logo" class="logo">
+  </div>
+
+  <h2>ابدأ رحلتك المهنية</h2>
+  <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
+  
+  <!-- rest of your form follows -->
+  <form id="intakeForm">
+    ...
+  </form>
+</div>
         <h2>ابدأ رحلتك المهنية</h2>
         <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
         
