@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mseer | ابدأ رحلتك المهنية</title>
-    <!-- Enhanced Fonts: Tajawal for Arabic, Inter for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #FF6B00; /* Mseer Orange */
+            --primary: #FF6B00;
             --primary-hover: #E65C00;
-            --bg: #FFFDF5; /* Logo Cream Background */
+            --bg: #FFFDF5; /* Cream */
             --card: #FFFFFF;
             --text: #1A1A1A;
             --text-light: #666666;
@@ -21,35 +20,50 @@
             font-family: 'Tajawal', sans-serif; 
             background: var(--bg); 
             color: var(--text); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
             margin: 0; 
-            padding: 20px; 
-            box-sizing: border-box; 
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
-        
-        .logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
 
-.logo {
-  max-width: 130px;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  /* Ensures logo blends with page background even if JPEG has slight white edge */
-  background: var(--bg);
-  padding: 2px; /* masks any 1px white halo from JPEG */
-  box-sizing: border-box;
-}
-        
+        /* === LOGO ON CREAM BACKGROUND (FULL WIDTH, CENTERED) === */
+        .logo-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            background: var(--bg); /* ensures logo blends */
+        }
+        .logo {
+            max-width: 130px;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            background: var(--bg); /* masks JPEG white edge */
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        /* === WHITE CARD FOR FORM === */
+        .container { 
+            background: var(--card); 
+            padding: 45px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
+            width: 100%; 
+            max-width: 520px; 
+            text-align: center;
+            margin-top: -20px; /* pulls form up slightly under logo */
+        }
+
         h2 { margin: 0 0 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
         p.subtitle { margin: 0 0 35px; color: var(--text-light); font-size: 15px; line-height: 1.7; }
         
+        /* ... rest of your existing styles unchanged ... */
         .form-group { margin-bottom: 20px; text-align: right; }
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: var(--text); }
         input, select, textarea { 
@@ -70,7 +84,6 @@
             box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08); 
         }
         
-        /* File Upload */
         .file-upload { 
             border: 2px dashed #E5E0D8; 
             border-radius: 14px; 
@@ -85,7 +98,6 @@
         .file-label { color: var(--text-light); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .file-name { margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 700; display: none; }
         
-        /* Toggle Switch */
         .toggle-container {
             display: flex; align-items: center; justify-content: center;
             margin: 25px 0; font-size: 14px; color: var(--text-light);
@@ -103,7 +115,6 @@
         .toggle-active .toggle-switch { background: var(--primary); }
         .toggle-active .toggle-switch::after { transform: translateX(20px); }
         
-        /* Manual Fields Animation */
         #manualFields { display: none; text-align: right; animation: slideDown 0.3s ease forwards; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -131,151 +142,144 @@
     </style>
 </head>
 <body>
- <div class="container">
-  <!-- Logo: centered, with background match -->
-  <div class="logo-container">
+  <!-- ✅ LOGO ON CREAM BACKGROUND (FULL PAGE WIDTH) -->
+  <div class="logo-wrapper">
     <img src="logo.jpeg" alt="Mseer Logo" class="logo">
   </div>
 
-  <h2>ابدأ رحلتك المهنية</h2>
-  <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
-  
-  <!-- rest of your form follows -->
-  <form id="intakeForm">
-    ...
-  </form>
-</div>
-        <h2>ابدأ رحلتك المهنية</h2>
-        <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
+  <!-- ✅ FORM INSIDE WHITE CARD -->
+  <div class="container">
+    <h2>ابدأ رحلتك المهنية</h2>
+    <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
+    
+    <form id="intakeForm">
+      <div class="form-group">
+        <label>الاسم الكامل *</label>
+        <input type="text" name="name" required placeholder="الاسم الثلاثي">
+      </div>
+      
+      <div class="form-group">
+        <label>رقم التواصل (واتساب) *</label>
+        <input type="tel" name="phone" required placeholder="05xxxxxxxx" style="direction: ltr; text-align: right;">
+      </div>
+      
+      <div class="form-group">
+        <label>البريد الإلكتروني *</label>
+        <input type="email" name="email" required placeholder="example@email.com" style="direction: ltr; text-align: right;">
+      </div>
+      
+      <div class="form-group">
+        <label>المدينة</label>
+        <input type="text" name="city" placeholder="الرياض، جدة...">
+      </div>
+      
+      <div id="uploadSection">
+        <div class="form-group">
+          <label>سيرتك الذاتية القديمة (إن وجدت)</label>
+          <div class="file-upload" onclick="document.getElementById('cvFile').click()">
+            <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
+            <div class="file-label">📎 اضغط لرفع الملف (PDF / Word)</div>
+            <div class="file-name" id="fileName"></div>
+          </div>
+        </div>
         
-        <form id="intakeForm">
-            <div class="form-group">
-                <label>الاسم الكامل *</label>
-                <input type="text" name="name" required placeholder="الاسم الثلاثي">
-            </div>
-            
-            <div class="form-group">
-                <label>رقم التواصل (واتساب) *</label>
-                <input type="tel" name="phone" required placeholder="05xxxxxxxx" style="direction: ltr; text-align: right;">
-            </div>
-            
-            <div class="form-group">
-                <label>البريد الإلكتروني *</label>
-                <input type="email" name="email" required placeholder="example@email.com" style="direction: ltr; text-align: right;">
-            </div>
-            
-            <div class="form-group">
-                <label>المدينة</label>
-                <input type="text" name="city" placeholder="الرياض، جدة...">
-            </div>
-            
-            <div id="uploadSection">
-                <div class="form-group">
-                    <label>سيرتك الذاتية القديمة (إن وجدت)</label>
-                    <div class="file-upload" onclick="document.getElementById('cvFile').click()">
-                        <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
-                        <div class="file-label">📎 اضغط لرفع الملف (PDF / Word)</div>
-                        <div class="file-name" id="fileName"></div>
-                    </div>
-                </div>
-                
-                <div class="toggle-container" onclick="toggleManualEntry()">
-                    <span>ليس لدي سيرة ذاتية</span>
-                    <div class="toggle-switch" id="toggleSwitch"></div>
-                    <span>إدخال البيانات يدوياً</span>
-                </div>
-            </div>
+        <div class="toggle-container" onclick="toggleManualEntry()">
+          <span>ليس لدي سيرة ذاتية</span>
+          <div class="toggle-switch" id="toggleSwitch"></div>
+          <span>إدخال البيانات يدوياً</span>
+        </div>
+      </div>
 
-            <div id="manualFields">
-                <div class="section-title">المعلومات الشخصية الإضافية</div>
-                <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
-                
-                <div class="section-title">الشهادات الأكاديمية</div>
-                <div class="form-group"><label>الدرجة العلمية</label><input type="text" name="edu_degree" placeholder="بكالوريوس، ماجستير..."></div>
-                <div class="form-group"><label>جهة الإصدار & تاريخ التخرج</label><input type="text" name="edu_details" placeholder="جامعة الملك سعود - 2020"></div>
-                
-                <div class="section-title">الخبرات العملية</div>
-                <div class="form-group"><label>آخر مسمى وظيفي & جهة العمل</label><input type="text" name="exp_last" placeholder="مسوق رقمي - شركة الأفق"></div>
-                <div class="form-group"><label>تاريخ البداية والنهاية</label><input type="text" name="exp_dates" placeholder="يناير 2021 - حتى الآن"></div>
-                
-                <div class="section-title">التدريب والشهادات</div>
-                <div class="form-group"><label>أبرز الدورات أو التدريب</label><textarea name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea></div>
-                
-                <div class="section-title">المشاريع والعمل التطوعي</div>
-                <div class="form-group"><label>تفاصيل المشاريع أو التطوع</label><textarea name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea></div>
-                
-                <div class="form-group">
-                    <label>صور الشهادات والمرفقات (اختياري)</label>
-                    <input type="file" name="certsFile" accept="image/*,.pdf">
-                </div>
-            </div>
-            
-            <button type="submit" id="submitBtn">إرسال الطلب</button>
-            <div id="statusMsg" class="status-msg"></div>
-        </form>
-    </div>
+      <div id="manualFields">
+        <div class="section-title">المعلومات الشخصية الإضافية</div>
+        <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
+        
+        <div class="section-title">الشهادات الأكاديمية</div>
+        <div class="form-group"><label>الدرجة العلمية</label><input type="text" name="edu_degree" placeholder="بكالوريوس، ماجستير..."></div>
+        <div class="form-group"><label>جهة الإصدار & تاريخ التخرج</label><input type="text" name="edu_details" placeholder="جامعة الملك سعود - 2020"></div>
+        
+        <div class="section-title">الخبرات العملية</div>
+        <div class="form-group"><label>آخر مسمى وظيفي & جهة العمل</label><input type="text" name="exp_last" placeholder="مسوق رقمي - شركة الأفق"></div>
+        <div class="form-group"><label>تاريخ البداية والنهاية</label><input type="text" name="exp_dates" placeholder="يناير 2021 - حتى الآن"></div>
+        
+        <div class="section-title">التدريب والشهادات</div>
+        <div class="form-group"><label>أبرز الدورات أو التدريب</label><textarea name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea></div>
+        
+        <div class="section-title">المشاريع والعمل التطوعي</div>
+        <div class="form-group"><label>تفاصيل المشاريع أو التطوع</label><textarea name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea></div>
+        
+        <div class="form-group">
+          <label>صور الشهادات والمرفقات (اختياري)</label>
+          <input type="file" name="certsFile" accept="image/*,.pdf">
+        </div>
+      </div>
+      
+      <button type="submit" id="submitBtn">إرسال الطلب</button>
+      <div id="statusMsg" class="status-msg"></div>
+    </form>
+  </div>
 
-<script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
-let isManual = false;
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
+    let isManual = false;
 
-function toggleManualEntry() {
-    isManual = !isManual;
-    const container = document.querySelector('.toggle-container');
-    const manualFields = document.getElementById('manualFields');
-    
-    if (isManual) {
-        container.classList.add('toggle-active');
-        manualFields.style.display = 'block';
-    } else {
-        container.classList.remove('toggle-active');
-        manualFields.style.display = 'none';
+    function toggleManualEntry() {
+        isManual = !isManual;
+        const container = document.querySelector('.toggle-container');
+        const manualFields = document.getElementById('manualFields');
+        
+        if (isManual) {
+            container.classList.add('toggle-active');
+            manualFields.style.display = 'block';
+        } else {
+            container.classList.remove('toggle-active');
+            manualFields.style.display = 'none';
+        }
     }
-}
 
-document.getElementById('cvFile').addEventListener('change', function(e) {
-    const fileName = e.target.files[0]?.name;
-    const display = document.getElementById('fileName');
-    if (fileName) { display.textContent = `✅ ${fileName}`; display.style.display = 'block'; }
-    else { display.style.display = 'none'; }
-});
+    document.getElementById('cvFile').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        const display = document.getElementById('fileName');
+        if (fileName) { display.textContent = `✅ ${fileName}`; display.style.display = 'block'; }
+        else { display.style.display = 'none'; }
+    });
 
-document.getElementById('intakeForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    const msg = document.getElementById('statusMsg');
-    const form = e.target;
-    
-    btn.disabled = true; btn.textContent = 'جاري المعالجة...';
-    msg.style.display = 'none'; form.classList.add('loading');
+    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const msg = document.getElementById('statusMsg');
+        const form = e.target;
+        
+        btn.disabled = true; btn.textContent = 'جاري المعالجة...';
+        msg.style.display = 'none'; form.classList.add('loading');
 
-    const fd = new FormData(form);
-    const data = Object.fromEntries(fd.entries());
-    
-    const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
-    const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
+        const fd = new FormData(form);
+        const data = Object.fromEntries(fd.entries());
+        
+        const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
+        const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
 
-    const payload = {
-        name: data.name, phone: data.phone, email: data.email, city: data.city || '',
-        serviceType: 'Pending Diagnosis', currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', targetRole: '',
-        personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '', major: data.major || '' }),
-        education: educationData, experience: expData, certifications: data.training || '', projects: data.projects || '',
-        attachments: data.cvFile?.name || data.certsFile?.name || ''
-    };
+        const payload = {
+            name: data.name, phone: data.phone, email: data.email, city: data.city || '',
+            serviceType: 'Pending Diagnosis', currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', targetRole: '',
+            personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '', major: data.major || '' }),
+            education: educationData, experience: expData, certifications: data.training || '', projects: data.projects || '',
+            attachments: data.cvFile?.name || data.certsFile?.name || ''
+        };
 
-    try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
-        msg.className = 'status-msg success';
-        form.reset(); document.getElementById('fileName').style.display = 'none';
-        if(isManual) toggleManualEntry();
-    } catch { 
-        msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى';
-        msg.className = 'status-msg error'; 
-    } finally { 
-        btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); 
-    }
-});
-</script>
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
+            msg.className = 'status-msg success';
+            form.reset(); document.getElementById('fileName').style.display = 'none';
+            if(isManual) toggleManualEntry();
+        } catch { 
+            msg.textContent = '❌ حدث خطأ. يرجى المحاولة مرة أخرى';
+            msg.className = 'status-msg error'; 
+        } finally { 
+            btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); 
+        }
+    });
+  </script>
 </body>
 </html>
