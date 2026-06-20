@@ -9,36 +9,97 @@
         :root { 
             --primary: #FF6B00; 
             --primary-hover: #E65C00;
-            --bg: #FFFDF5; 
+            --bg: #FFF2D0; /* MATCHED TO LOGO BACKGROUND */
             --card: #FFFFFF; 
             --text: #1A1A1A; 
             --text-light: #666666;
             --border: #F0EBE1; 
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 30px; }
         
-        /* Login Overlay */
-        #loginOverlay { position: fixed; inset: 0; background: rgba(255,253,245,0.98); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .login-box { background: var(--card); padding: 45px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
-        .login-box img { max-width: 100px; margin-bottom: 20px; border-radius: 8px; }
-        .login-box input { width: 100%; padding: 14px; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; font-family: 'Inter', sans-serif; }
-        .login-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255,107,0,0.1); }
-        .login-box button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .login-box button:hover { background: var(--primary-hover); }
-        
-        /* Dashboard Layout */
-        .dashboard { display: none; max-width: 1400px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 30px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        /* === LOGIN OVERLAY (MATCHES INTAKE FORM STYLE) === */
+        #loginOverlay { 
+            position: fixed; inset: 0; 
+            background: rgba(255, 242, 208, 0.98); 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 1000; backdrop-filter: blur(5px); 
+        }
+        .login-box { 
+            background: var(--card); 
+            padding: 45px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
+            width: 100%; max-width: 400px; text-align: center; 
+        }
+        .login-box img { 
+            max-width: 80px; margin-bottom: 20px; 
+            border-radius: 12px; display: block; margin-left: auto; margin-right: auto;
+        }
+        .login-box h2 { margin: 0 0 10px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .login-box p { color: var(--text-light); font-size: 15px; margin: 0 0 25px; line-height: 1.7; }
+        .login-box input { 
+            width: 100%; padding: 14px 16px; margin: 0 0 20px; 
+            border: 1px solid var(--border); border-radius: 12px; 
+            font-size: 15px; box-sizing: border-box; outline: none; 
+            transition: all 0.2s ease; background: #FAFAF8;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-box input:focus { 
+            border-color: var(--primary); background: #fff;
+            box-shadow: 0 0 0 4px rgba(255,107,0,0.08); 
+        }
+        .login-box button { 
+            width: 100%; padding: 16px; background: var(--primary); color: white; 
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700; 
+            cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+        }
+        .login-box button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .login-box button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        #loginError { color: #991b1b; font-size: 14px; margin-top: 15px; display: none; font-weight: 500; }
+
+        /* === DASHBOARD LAYOUT === */
+        .dashboard { 
+            display: none; max-width: 1200px; width: 100%; 
+            background: var(--card); padding: 40px; 
+            border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; flex-wrap: wrap; gap: 20px; }
         .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
-        .stats { display: flex; gap: 20px; }
-        .stat-card { background: var(--card); padding: 20px 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border); }
-        .stat-card .label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-        .stat-card .value { font-size: 28px; font-weight: 700; margin-top: 8px; color: var(--primary); }
+        .stats { display: flex; gap: 15px; flex-wrap: wrap; }
+        .stat-card { 
+            background: #FAFAF8; padding: 16px 24px; border-radius: 16px; 
+            border: 1px solid var(--border); min-width: 120px;
+        }
+        .stat-card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+        .stat-card .value { font-size: 24px; font-weight: 700; margin-top: 6px; color: var(--primary); }
         
+        /* Filter Bar */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .filter-btn { 
+            padding: 10px 20px; border: 1px solid var(--border); background: var(--card); 
+            border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; 
+            transition: 0.2s; font-family: 'Inter', sans-serif;
+        }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
         /* Table Styles */
-        .table-container { background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 20px 24px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .table-container { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
         th { background: #FAFAF8; font-weight: 600; color: var(--text-light); text-transform: uppercase; font-size: 11px; letter-spacing: 0.8px; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: #FFFDF5; }
@@ -50,31 +111,31 @@
         .badge-completed { background: #DCFCE7; color: #166534; }
         
         /* Action Buttons */
-        .btn-sm { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; margin-right: 8px; font-family: 'Inter', sans-serif; }
+        .btn-sm { 
+            padding: 8px 16px; border: none; border-radius: 8px; 
+            font-size: 13px; cursor: pointer; font-weight: 600; 
+            transition: all 0.2s; margin-right: 8px; font-family: 'Inter', sans-serif;
+        }
         .btn-view { background: #F5F5F4; color: var(--text); }
         .btn-view:hover { background: #E7E5E4; }
         .btn-complete { background: var(--primary); color: white; }
         .btn-complete:hover { background: var(--primary-hover); }
-        
-        /* Filter Bar */
-        .filter-bar { display: flex; gap: 12px; margin-bottom: 25px; }
-        .filter-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.2s; font-family: 'Inter', sans-serif; }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     </style>
 </head>
 <body>
+    <!-- LOGIN OVERLAY -->
     <div id="loginOverlay">
         <div class="login-box">
-            <img src="https://i.imgur.com/8XkRzJl.jpeg" alt="Mseer Logo">
-            <h2 style="margin:0 0 10px; font-size:20px;">Staff Access</h2>
-            <p style="color:var(--text-light); font-size:14px; margin:0;">Enter dashboard password</p>
+            <img src="logo.jpeg" alt="Mseer Logo">
+            <h2>Staff Access</h2>
+            <p>Enter dashboard password to continue</p>
             <input type="password" id="passwordInput" placeholder="Password">
             <button onclick="checkPassword()">Unlock Dashboard</button>
-            <p id="loginError" style="color:#991b1b; font-size:13px; margin-top:15px; display:none;">Incorrect password</p>
+            <p id="loginError">Incorrect password</p>
         </div>
     </div>
 
+    <!-- DASHBOARD -->
     <div class="dashboard" id="dashboard">
         <div class="header">
             <h1>Client Management</h1>
@@ -110,7 +171,7 @@
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
-        const DASHBOARD_PASSWORD = '1234'; // Change this!
+        const DASHBOARD_PASSWORD = '1234'; // ⚠️ CHANGE THIS!
         let allClients = [];
 
         function checkPassword() {
@@ -144,7 +205,7 @@
                     <tr>
                         <td><strong>${client['Client Name']}</strong><br><small style="color:var(--text-light)">${client.Email}</small></td>
                         <td>${client['Service Type']}</td>
-                        <td>${client['Blocker Tag']}</td>
+                        <td>${client['Blocker Tag'] || '-'}</td>
                         <td><span class="badge ${statusClass}">${client.Status}</span></td>
                         <td>
                             <button class="btn-sm btn-view" onclick="viewClient('${client.Email}')">View Details</button>
