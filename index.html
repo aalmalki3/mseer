@@ -9,7 +9,7 @@
         :root { 
             --primary: #FF6B00;
             --primary-hover: #E65C00;
-            --bg: #FFFDF5; /* Cream */
+            --bg: #FFFDF5;
             --card: #FFFFFF;
             --text: #1A1A1A;
             --text-light: #666666;
@@ -21,7 +21,7 @@
             background: var(--bg); 
             color: var(--text); 
             margin: 0; 
-            padding: 0;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -30,74 +30,88 @@
             box-sizing: border-box;
         }
 
-        /* === LOGO ON CREAM BACKGROUND (FULL WIDTH, CENTERED) === */
-        .logo-wrapper {
-            width: 100%;
+        /* === HEADER ROW: LOGO + HEADLINE SIDE BY SIDE === */
+        .header-row {
             display: flex;
+            align-items: center;
             justify-content: center;
-            padding: 20px 0;
-            background: var(--bg); /* ensures logo blends */
+            gap: 20px;
+            width: 100%;
+            max-width: 520px;
+            margin-bottom: 12px;
         }
+
         .logo {
-            max-width: 130px;
+            max-width: 80px; /* Smaller when beside text */
             height: auto;
             display: block;
             border-radius: 12px;
-            background: var(--bg); /* masks JPEG white edge */
-            padding: 2px;
+            background-color: var(--bg); /* SEAMLESS BACKGROUND MATCH */
+            padding: 4px; /* Extra buffer to hide JPEG edges */
             box-sizing: border-box;
+            flex-shrink: 0; /* Prevents logo from squishing */
+        }
+
+        .header-row h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+        }
+
+        /* Subtitle stays centered below the row */
+        p.subtitle { 
+            margin: 0 0 30px; 
+            color: var(--text-light); 
+            font-size: 15px; 
+            line-height: 1.7; 
+            text-align: center;
+            max-width: 520px;
         }
 
         /* === WHITE CARD FOR FORM === */
         .container { 
             background: var(--card); 
-            padding: 45px 40px; 
+            padding: 40px; 
             border-radius: 24px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
             width: 100%; 
             max-width: 520px; 
             text-align: center;
-            margin-top: -20px; /* pulls form up slightly under logo */
         }
 
-        h2 { margin: 0 0 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        p.subtitle { margin: 0 0 35px; color: var(--text-light); font-size: 15px; line-height: 1.7; }
+        /* Mobile Responsive: Stack vertically on small screens */
+        @media (max-width: 480px) {
+            .header-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .header-row h2 { font-size: 24px; }
+            .logo { max-width: 100px; }
+        }
         
-        /* ... rest of your existing styles unchanged ... */
+        /* ... Rest of your form styles remain unchanged ... */
         .form-group { margin-bottom: 20px; text-align: right; }
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: var(--text); }
         input, select, textarea { 
-            width: 100%; 
-            padding: 14px 16px; 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            font-size: 15px; 
-            box-sizing: border-box; 
-            outline: none; 
-            transition: all 0.2s ease; 
-            background: #FAFAF8;
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border); 
+            border-radius: 12px; font-size: 15px; box-sizing: border-box; 
+            outline: none; transition: all 0.2s ease; background: #FAFAF8;
             font-family: 'Tajawal', sans-serif;
         }
         input:focus, select:focus, textarea:focus { 
-            border-color: var(--primary); 
-            background: #fff;
+            border-color: var(--primary); background: #fff;
             box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08); 
         }
-        
         .file-upload { 
-            border: 2px dashed #E5E0D8; 
-            border-radius: 14px; 
-            padding: 25px; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            background: #FAFAF8; 
-            margin-bottom: 15px;
+            border: 2px dashed #E5E0D8; border-radius: 14px; padding: 25px; 
+            cursor: pointer; transition: all 0.2s; background: #FAFAF8; margin-bottom: 15px;
         }
         .file-upload:hover { border-color: var(--primary); background: #FFF8F0; }
         .file-upload input { display: none; }
         .file-label { color: var(--text-light); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .file-name { margin-top: 10px; font-size: 13px; color: var(--primary); font-weight: 700; display: none; }
-        
         .toggle-container {
             display: flex; align-items: center; justify-content: center;
             margin: 25px 0; font-size: 14px; color: var(--text-light);
@@ -114,27 +128,20 @@
         }
         .toggle-active .toggle-switch { background: var(--primary); }
         .toggle-active .toggle-switch::after { transform: translateX(20px); }
-        
         #manualFields { display: none; text-align: right; animation: slideDown 0.3s ease forwards; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .section-title { 
             font-size: 15px; font-weight: 700; color: var(--primary); 
             margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border); 
             text-align: right;
         }
-        
         button[type="submit"] { 
-            width: 100%; padding: 16px; 
-            background: var(--primary); color: white; 
-            border: none; border-radius: 12px; 
-            font-size: 16px; font-weight: 700; 
-            cursor: pointer; transition: all 0.2s; 
-            margin-top: 25px; font-family: 'Tajawal', sans-serif;
+            width: 100%; padding: 16px; background: var(--primary); color: white; 
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700; 
+            cursor: pointer; transition: all 0.2s; margin-top: 25px; font-family: 'Tajawal', sans-serif;
         }
         button[type="submit"]:hover { background: var(--primary-hover); transform: translateY(-1px); }
         button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        
         .status-msg { margin-top: 20px; padding: 14px; border-radius: 10px; font-size: 14px; display: none; font-weight: 500; }
         .success { background: #DCFCE7; color: #166534; display: block !important; }
         .error { background: #FEE2E2; color: #991B1B; display: block !important; }
@@ -142,16 +149,17 @@
     </style>
 </head>
 <body>
-  <!-- ✅ LOGO ON CREAM BACKGROUND (FULL PAGE WIDTH) -->
-  <div class="logo-wrapper">
-    <img src="logo.jpeg" alt="Mseer Logo" class="logo">
-  </div>
 
-  <!-- ✅ FORM INSIDE WHITE CARD -->
-  <div class="container">
+  <!-- ✅ NEW HEADER ROW: Logo + Headline Side by Side -->
+  <div class="header-row">
+    <img src="logo.jpeg" alt="Mseer Logo" class="logo">
     <h2>ابدأ رحلتك المهنية</h2>
-    <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
-    
+  </div>
+  
+  <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
+
+  <!-- ✅ FORM CARD -->
+  <div class="container">
     <form id="intakeForm">
       <div class="form-group">
         <label>الاسم الكامل *</label>
@@ -193,21 +201,16 @@
       <div id="manualFields">
         <div class="section-title">المعلومات الشخصية الإضافية</div>
         <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
-        
         <div class="section-title">الشهادات الأكاديمية</div>
         <div class="form-group"><label>الدرجة العلمية</label><input type="text" name="edu_degree" placeholder="بكالوريوس، ماجستير..."></div>
         <div class="form-group"><label>جهة الإصدار & تاريخ التخرج</label><input type="text" name="edu_details" placeholder="جامعة الملك سعود - 2020"></div>
-        
         <div class="section-title">الخبرات العملية</div>
         <div class="form-group"><label>آخر مسمى وظيفي & جهة العمل</label><input type="text" name="exp_last" placeholder="مسوق رقمي - شركة الأفق"></div>
         <div class="form-group"><label>تاريخ البداية والنهاية</label><input type="text" name="exp_dates" placeholder="يناير 2021 - حتى الآن"></div>
-        
         <div class="section-title">التدريب والشهادات</div>
         <div class="form-group"><label>أبرز الدورات أو التدريب</label><textarea name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea></div>
-        
         <div class="section-title">المشاريع والعمل التطوعي</div>
         <div class="form-group"><label>تفاصيل المشاريع أو التطوع</label><textarea name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea></div>
-        
         <div class="form-group">
           <label>صور الشهادات والمرفقات (اختياري)</label>
           <input type="file" name="certsFile" accept="image/*,.pdf">
@@ -222,43 +225,28 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
     let isManual = false;
-
     function toggleManualEntry() {
         isManual = !isManual;
-        const container = document.querySelector('.toggle-container');
-        const manualFields = document.getElementById('manualFields');
-        
-        if (isManual) {
-            container.classList.add('toggle-active');
-            manualFields.style.display = 'block';
-        } else {
-            container.classList.remove('toggle-active');
-            manualFields.style.display = 'none';
-        }
+        document.querySelector('.toggle-container').classList.toggle('toggle-active', isManual);
+        document.getElementById('manualFields').style.display = isManual ? 'block' : 'none';
     }
-
     document.getElementById('cvFile').addEventListener('change', function(e) {
         const fileName = e.target.files[0]?.name;
         const display = document.getElementById('fileName');
         if (fileName) { display.textContent = `✅ ${fileName}`; display.style.display = 'block'; }
         else { display.style.display = 'none'; }
     });
-
     document.getElementById('intakeForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         const msg = document.getElementById('statusMsg');
         const form = e.target;
-        
         btn.disabled = true; btn.textContent = 'جاري المعالجة...';
         msg.style.display = 'none'; form.classList.add('loading');
-
         const fd = new FormData(form);
         const data = Object.fromEntries(fd.entries());
-        
         const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
         const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
-
         const payload = {
             name: data.name, phone: data.phone, email: data.email, city: data.city || '',
             serviceType: 'Pending Diagnosis', currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', targetRole: '',
@@ -266,7 +254,6 @@
             education: educationData, experience: expData, certifications: data.training || '', projects: data.projects || '',
             attachments: data.cvFile?.name || data.certsFile?.name || ''
         };
-
         try {
             await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
