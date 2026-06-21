@@ -9,7 +9,7 @@
         :root { 
             --primary: #FF6B00; 
             --primary-hover: #E65C00;
-            --bg: #FFF2D0; /* MATCHED TO LOGO BACKGROUND */
+            --bg: #FFF2D0; 
             --card: #FFFFFF; 
             --text: #1A1A1A; 
             --text-light: #666666;
@@ -30,7 +30,6 @@
             box-sizing: border-box;
         }
 
-        /* === LOGIN OVERLAY (MATCHES INTAKE FORM STYLE) === */
         #loginOverlay { 
             position: fixed; inset: 0; 
             background: rgba(255, 242, 208, 0.98); 
@@ -67,10 +66,8 @@
             cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
         }
         .login-box button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        .login-box button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         #loginError { color: #991b1b; font-size: 14px; margin-top: 15px; display: none; font-weight: 500; }
 
-        /* === DASHBOARD LAYOUT === */
         .dashboard { 
             display: none; max-width: 1200px; width: 100%; 
             background: var(--card); padding: 40px; 
@@ -78,6 +75,7 @@
         }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; flex-wrap: wrap; gap: 20px; }
         .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+        
         .stats { display: flex; gap: 15px; flex-wrap: wrap; }
         .stat-card { 
             background: #FAFAF8; padding: 16px 24px; border-radius: 16px; 
@@ -86,7 +84,6 @@
         .stat-card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
         .stat-card .value { font-size: 24px; font-weight: 700; margin-top: 6px; color: var(--primary); }
         
-        /* Filter Bar */
         .filter-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
         .filter-btn { 
             padding: 10px 20px; border: 1px solid var(--border); background: var(--card); 
@@ -96,7 +93,6 @@
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Table Styles */
         .table-container { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -104,13 +100,11 @@
         tr:last-child td { border-bottom: none; }
         tr:hover { background: #FFFDF5; }
         
-        /* Status Badges */
         .badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
         .badge-pending { background: #FEF3C7; color: #92400E; }
         .badge-progress { background: #DBEAFE; color: #1E40AF; }
         .badge-completed { background: #DCFCE7; color: #166534; }
         
-        /* Action Buttons */
         .btn-sm { 
             padding: 8px 16px; border: none; border-radius: 8px; 
             font-size: 13px; cursor: pointer; font-weight: 600; 
@@ -120,10 +114,57 @@
         .btn-view:hover { background: #E7E5E4; }
         .btn-complete { background: var(--primary); color: white; }
         .btn-complete:hover { background: var(--primary-hover); }
+
+        .btn-export {
+            padding: 10px 20px; background: #1A1A1A; color: white; border: none;
+            border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+            display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .btn-export:hover { background: #333; }
+
+        /* === CLIENT DETAIL DRAWER === */
+        .drawer-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            z-index: 2000; display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .drawer-overlay.active { display: block; opacity: 1; }
+
+        .drawer {
+            position: fixed; top: 0; right: -500px; width: 450px; max-width: 90vw;
+            height: 100vh; background: var(--card); z-index: 2001;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; overflow-y: auto;
+        }
+        .drawer.active { right: 0; }
+
+        .drawer-header {
+            padding: 24px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: var(--card); z-index: 10;
+        }
+        .drawer-header h2 { margin: 0; font-size: 20px; color: var(--text); }
+        .close-drawer { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-light); line-height: 1; }
+
+        .drawer-body { padding: 24px; flex: 1; }
+        .detail-section { margin-bottom: 24px; }
+        .detail-section h3 { 
+            font-size: 14px; text-transform: uppercase; color: var(--primary); 
+            letter-spacing: 0.5px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+        }
+        .detail-row { margin-bottom: 12px; font-size: 14px; line-height: 1.6; }
+        .detail-label { font-weight: 600; color: var(--text-light); display: block; font-size: 12px; margin-bottom: 2px; }
+        .detail-value { color: var(--text); }
+
+        .cv-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #FFF8F0; color: var(--primary); padding: 10px 16px;
+            border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;
+            border: 1px solid #FFE0B2; transition: 0.2s;
+        }
+        .cv-link:hover { background: #FFE0B2; }
     </style>
 </head>
 <body>
-    <!-- LOGIN OVERLAY -->
     <div id="loginOverlay">
         <div class="login-box">
             <img src="logo.jpeg" alt="Mseer Logo">
@@ -135,22 +176,24 @@
         </div>
     </div>
 
-    <!-- DASHBOARD -->
     <div class="dashboard" id="dashboard">
         <div class="header">
             <h1>Client Management</h1>
-            <div class="stats">
-                <div class="stat-card"><div class="label">Total Clients</div><div class="value" id="totalCount">0</div></div>
-                <div class="stat-card"><div class="label">Pending</div><div class="value" id="pendingCount">0</div></div>
-                <div class="stat-card"><div class="label">Completed</div><div class="value" id="completedCount">0</div></div>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <div class="stats">
+                    <div class="stat-card"><div class="label">Total</div><div class="value" id="totalCount">0</div></div>
+                    <div class="stat-card"><div class="label">Pending</div><div class="value" id="pendingCount">0</div></div>
+                    <div class="stat-card"><div class="label">Done</div><div class="value" id="completedCount">0</div></div>
+                </div>
+                <button class="btn-export" onclick="exportToCSV()">📥 Export CSV</button>
             </div>
         </div>
 
         <div class="filter-bar">
-            <button class="filter-btn active" onclick="filterTable('all')">All</button>
-            <button class="filter-btn" onclick="filterTable('Pending')">Pending</button>
-            <button class="filter-btn" onclick="filterTable('In Progress')">In Progress</button>
-            <button class="filter-btn" onclick="filterTable('Completed')">Completed</button>
+            <button class="filter-btn active" onclick="filterTable('all', this)">All</button>
+            <button class="filter-btn" onclick="filterTable('Pending', this)">Pending</button>
+            <button class="filter-btn" onclick="filterTable('In Progress', this)">In Progress</button>
+            <button class="filter-btn" onclick="filterTable('Completed', this)">Completed</button>
         </div>
 
         <div class="table-container">
@@ -166,6 +209,18 @@
                 </thead>
                 <tbody id="clientTableBody"></tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Client Detail Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="clientDrawer">
+        <div class="drawer-header">
+            <h2 id="drawerClientName">Client Details</h2>
+            <button class="close-drawer" onclick="closeDrawer()">&times;</button>
+        </div>
+        <div class="drawer-body" id="drawerBody">
+            <!-- Content injected via JS -->
         </div>
     </div>
 
@@ -222,9 +277,9 @@
             document.getElementById('completedCount').textContent = allClients.filter(c => c.Status === 'Completed').length;
         }
 
-        function filterTable(status) {
+        function filterTable(status, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            btnElement.classList.add('active');
             if (status === 'all') renderTable(allClients);
             else renderTable(allClients.filter(c => c.Status === status));
         }
@@ -237,7 +292,108 @@
 
         function viewClient(email) {
             const client = allClients.find(c => c.Email === email);
-            alert(`Client: ${client['Client Name']}\nService: ${client['Service Type']}\nCurrent Role: ${client['Current Role']}\nTarget Role: ${client['Target Role']}\nNotes: ${client.Notes || 'No notes'}`);
+            if (!client) return;
+
+            document.getElementById('drawerClientName').textContent = client['Client Name'];
+            
+            // Parse JSON fields safely
+            let personalInfo = {};
+            try { personalInfo = JSON.parse(client['Personal Info'] || '{}'); } catch(e) {}
+            
+            let education = [];
+            try { education = JSON.parse(client['Education'] || '[]'); } catch(e) {}
+
+            let experience = [];
+            try { experience = JSON.parse(client['Experience'] || '[]'); } catch(e) {}
+
+            // Build Drawer Content
+            const body = document.getElementById('drawerBody');
+            body.innerHTML = `
+                <div class="detail-section">
+                    <h3>Contact & Basics</h3>
+                    <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${client.Email}</span></div>
+                    <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value" dir="ltr">${personalInfo.phone || 'N/A'}</span></div>
+                    <div class="detail-row"><span class="detail-label">City</span><span class="detail-value">${personalInfo.city || 'N/A'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Major</span><span class="detail-value">${personalInfo.major || 'N/A'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Target Role</span><span class="detail-value">${client['Target Role'] || 'Not specified'}</span></div>
+                </div>
+
+                ${client['Attachments Link'] ? `
+                <div class="detail-section">
+                    <h3>Documents</h3>
+                    <a href="${client['Attachments Link']}" target="_blank" class="cv-link">📎 Download CV / Attachments</a>
+                </div>` : '<div class="detail-section"><h3>Documents</h3><p style="color:var(--text-light); font-size:13px;">No CV uploaded.</p></div>'}
+
+                ${education.length > 0 ? `
+                <div class="detail-section">
+                    <h3>Education</h3>
+                    ${education.map(edu => `
+                        <div class="detail-row">
+                            <span class="detail-label">${edu.degree || 'Degree'}</span>
+                            <span class="detail-value">${edu.details || ''}</span>
+                        </div>
+                    `).join('')}
+                </div>` : ''}
+
+                ${experience.length > 0 ? `
+                <div class="detail-section">
+                    <h3>Experience</h3>
+                    ${experience.map(exp => `
+                        <div class="detail-row">
+                            <span class="detail-label">${exp.role || 'Role'}</span>
+                            <span class="detail-value">${exp.dates || ''}</span>
+                        </div>
+                    `).join('')}
+                </div>` : ''}
+
+                <div class="detail-section">
+                    <h3>Certifications & Projects</h3>
+                    <div class="detail-row"><span class="detail-label">Certifications</span><span class="detail-value">${client.Certifications || 'None'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Projects</span><span class="detail-value">${client.Projects || 'None'}</span></div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Coach Notes</h3>
+                    <textarea style="width:100%; min-height:100px; padding:12px; border:1px solid var(--border); border-radius:8px; font-family:inherit;" placeholder="Add internal notes about this client...">${client.Notes || ''}</textarea>
+                </div>
+            `;
+
+            // Open Drawer
+            document.getElementById('drawerOverlay').classList.add('active');
+            document.getElementById('clientDrawer').classList.add('active');
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('active');
+            document.getElementById('clientDrawer').classList.remove('active');
+        }
+
+        function exportToCSV() {
+            if (allClients.length === 0) return alert('No data to export');
+            
+            const headers = ['Name', 'Email', 'Phone', 'Service', 'Status', 'Current Role', 'Target Role'];
+            const csvContent = [
+                headers.join(','),
+                ...allClients.map(c => {
+                    let phone = '';
+                    try { phone = JSON.parse(c['Personal Info'] || '{}').phone || ''; } catch(e){}
+                    return [
+                        `"${c['Client Name']}"`, 
+                        `"${c.Email}"`, 
+                        `"${phone}"`, 
+                        `"${c['Service Type']}"`, 
+                        `"${c.Status}"`,
+                        `"${c['Current Role'] || ''}"`,
+                        `"${c['Target Role'] || ''}"`
+                    ].join(',');
+                })
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Mseer_Clients_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
         }
 
         document.getElementById('passwordInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
