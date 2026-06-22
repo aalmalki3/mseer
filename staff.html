@@ -6,20 +6,20 @@
     <title>Staff Dashboard | Mseer</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #FF6B00; --primary-hover: #E65C00; --bg: #FFF2D0; --card: #FFFFFF; 
-            --text: #1A1A1A; --text-light: #666666; --border: #F0EBE1; 
+        :root {
+            --primary: #FF6B00; --primary-hover: #E65C00; --bg: #FFF2D0; --card: #FFFFFF;
+            --text: #1A1A1A; --text-light: #666666; --border: #F0EBE1;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 30px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 30px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
 
         #loginOverlay { position: fixed; inset: 0; background: rgba(255, 242, 208, 0.98); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
         .login-box { background: var(--card); padding: 45px 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); width: 100%; max-width: 400px; text-align: center; }
         .login-box img { max-width: 80px; margin-bottom: 20px; border-radius: 12px; display: block; margin: 0 auto 20px; }
         .login-box h2 { margin: 0 0 10px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
         .login-box p { color: var(--text-light); font-size: 15px; margin: 0 0 25px; line-height: 1.7; }
-        .login-box input { width: 100%; padding: 14px 16px; margin: 0 0 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; box-sizing: border-box; outline: none; transition: all 0.2s ease; background: #FAFAF8; font-family: 'Inter', sans-serif; }
+        .login-box input { width: 100%; padding: 14px 16px; margin: 0 0 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; box-sizing: border-box; outline: none; transition: all 0.12s ease; }
         .login-box input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(255,107,0,0.08); }
-        .login-box button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .login-box button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.12s ease; }
         .login-box button:hover { background: var(--primary-hover); transform: translateY(-1px); }
         .login-box button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         
@@ -38,7 +38,7 @@
         .stat-card .value { font-size: 24px; font-weight: 700; margin-top: 6px; color: var(--primary); }
         
         .filter-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.2s; font-family: 'Inter', sans-serif; }
+        .filter-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; transition: 0.2s; font-family: inherit; }
         .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
@@ -61,24 +61,24 @@
         .btn-view:hover { background: #E7E5E4; }
         .btn-action { background: var(--primary); color: white; }
         .btn-action:hover { background: var(--primary-hover); }
-        .btn-dark { padding: 10px 20px; background: #1A1A1A; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-dark { padding: 10px 20px; background: #1A1A1A; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; }
         .btn-dark:hover { background: #333; }
 
         /* Drawer & Modals */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; display: none; opacity: 0; transition: opacity 0.3s; }
         .overlay.active { display: block; opacity: 1; }
-        .drawer { position: fixed; top: 0; right: -500px; width: 450px; max-width: 90vw; height: 100vh; background: var(--card); z-index: 2001; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow-y: auto; }
+        .drawer { position: fixed; top: 0; right: -500px; width: 450px; max-width: 90vw; height: 100vh; background: var(--card); z-index: 2001; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: right 0.3s ease; display: flex; flex-direction: column; }
         .drawer.active { right: 0; }
-        .drawer-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card); z-index: 10; }
+        .drawer-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card); z-index: 2; }
         .drawer-header h2 { margin: 0; font-size: 20px; color: var(--text); }
         .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-light); line-height: 1; }
-        .drawer-body { padding: 24px; flex: 1; }
+        .drawer-body { padding: 24px; flex: 1; overflow-y: auto; }
         .detail-section { margin-bottom: 24px; }
         .detail-section h3 { font-size: 14px; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .detail-row { margin-bottom: 12px; font-size: 14px; line-height: 1.6; }
         .detail-label { font-weight: 600; color: var(--text-light); display: block; font-size: 12px; margin-bottom: 2px; }
         .detail-value { color: var(--text); }
-        .cv-link { display: inline-flex; align-items: center; gap: 8px; background: #FFF8F0; color: var(--primary); padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; border: 1px solid #FFE0B2; transition: 0.2s; }
+        .cv-link { display: inline-flex; align-items: center; gap: 8px; background: #FFF8F0; color: var(--primary); padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
         .cv-link:hover { background: #FFE0B2; }
         
         select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; box-sizing: border-box; margin-top: 4px; }
@@ -101,21 +101,21 @@
             <img src="logo.jpeg" alt="Mseer Logo">
             <h2>Staff Access</h2>
             <p>Enter dashboard password to continue</p>
-            <input type="password" id="passwordInput" placeholder="Password">
-            
+            <input type="password" id="passwordInput" placeholder="Password" aria-label="Password">
+
             <!-- Primary Login Button -->
-            <button onclick="checkPassword()">Unlock Dashboard</button>
-            
+            <button id="unlockBtn" type="button" onclick="checkPassword()">Unlock Dashboard</button>
+
             <!-- Debug Tools (Remove before production) -->
-            <button onclick="debugAuth()" style="margin-top:10px; padding:8px 16px; background:#666; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">🔍 Debug Auth</button>
-            
+            <button id="debugBtn" type="button" onclick="debugAuth()" style="margin-top:10px; padding:8px 16px; background:#666; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">🔍 Debug Auth</button>
+
             <!-- ✅ MISSING ELEMENT RESTORED -->
-            <p id="loginError">Incorrect password</p>
-            <p id="debugOutput"></p>
+            <p id="loginError" role="alert" aria-live="assertive">Incorrect password</p>
+            <p id="debugOutput" aria-hidden="true"></p>
         </div>
     </div>
 
-    <div class="dashboard" id="dashboard">
+    <div class="dashboard" id="dashboard" role="main">
         <div class="header">
             <h1>Client Management</h1>
             <div class="header-actions">
@@ -155,7 +155,7 @@
 
     <!-- Client Drawer -->
     <div class="overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-    <div class="drawer" id="clientDrawer">
+    <div class="drawer" id="clientDrawer" aria-hidden="true">
         <div class="drawer-header">
             <h2 id="drawerClientName">Client Details</h2>
             <button class="close-btn" onclick="closeDrawer()">&times;</button>
@@ -164,7 +164,7 @@
     </div>
 
     <!-- Reports Modal -->
-    <div class="modal" id="reportsModal">
+    <div class="modal" id="reportsModal" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h2 style="margin:0;">Analytics & Reports</h2>
@@ -188,48 +188,46 @@
 
         // Debug function for testing backend auth response
         async function debugAuth() {
-            var output = document.getElementById('debugOutput');
+            const output = document.getElementById('debugOutput');
+            if (!output) return;
             output.textContent = 'Testing...';
             try {
-                var response = await fetch(SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: 'authenticate', password: '1234' })
                 });
-                var result = await response.json();
+                const result = await response.json();
                 output.textContent = 'Response: ' + JSON.stringify(result);
-                output.style.color = result.authenticated ? '#16A34A' : '#EF4444';
+                output.style.color = result && result.authenticated ? '#16A34A' : '#EF4444';
             } catch (err) {
-                output.textContent = 'Error: ' + err.message;
+                output.textContent = 'Error: ' + (err.message || err);
                 output.style.color = '#EF4444';
             }
         }
             
         // ✅ FIXED: Safe DOM access + No Content-Type header
         async function checkPassword() {
-            const input = document.getElementById('passwordInput').value.trim();
-            const btn = document.querySelector('.login-box button');
-            
-            // ✅ SAFETY CHECK: Prevents null reference error
+            const inputEl = document.getElementById('passwordInput');
+            const btn = document.getElementById('unlockBtn');
             const errorMsg = document.getElementById('loginError');
-            if (!errorMsg) {
-                console.error('Critical: #loginError element missing from HTML');
+            if (!inputEl || !btn || !errorMsg) {
+                console.error('Critical DOM elements missing.');
                 return;
             }
-            
-            btn.disabled = true; 
+
+            const password = inputEl.value.trim();
+            btn.disabled = true;
             btn.textContent = 'Verifying...';
             errorMsg.style.display = 'none';
 
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    // ⚠️ NO Content-Type header to prevent CORS preflight
-                    body: JSON.stringify({ action: 'authenticate', password: input })
+                    // NO Content-Type header to avoid CORS preflight for GAS
+                    body: JSON.stringify({ action: 'authenticate', password: password })
                 });
-                
                 const result = await response.json();
-                
-                if (result.authenticated === true) {
+                if (result && result.authenticated === true) {
                     document.getElementById('loginOverlay').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     loadClients();
@@ -242,7 +240,7 @@
                 errorMsg.textContent = 'Network error. Please try again.';
                 errorMsg.style.display = 'block';
             } finally {
-                btn.disabled = false; 
+                btn.disabled = false;
                 btn.textContent = 'Unlock Dashboard';
             }
         }
@@ -251,10 +249,10 @@
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getClients`, { method: 'GET' });
                 const data = await response.json();
-                allClients = data.clients || [];
+                allClients = data && Array.isArray(data.clients) ? data.clients : [];
                 renderTable(allClients);
                 updateStats();
-            } catch (err) { 
+            } catch (err) {
                 console.error('Failed to load clients:', err);
                 alert('Failed to load client data. Please refresh the page.');
             }
@@ -267,16 +265,18 @@
 
         function renderTable(clients) {
             const tbody = document.getElementById('clientTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             clients.forEach(client => {
+                const safeEmail = (client.Email || '').replace(/'/g, "\\'");
                 const row = `
                     <tr>
-                        <td><strong>${client.Name || 'N/A'}</strong><br><small style="color:var(--text-light)">${client.Email}</small></td>
+                        <td><strong>${client.Name || 'N/A'}</strong><br><small style="color:var(--text-light)">${client.Email || ''}</small></td>
                         <td>${client.Service || 'Career Diagnosis'}</td>
                         <td>${client.TargetRole || 'N/A'}</td>
-                        <td><span class="badge ${getBadgeClass(client.Status)}">${client.Status}</span></td>
+                        <td><span class="badge ${getBadgeClass(client.Status)}">${client.Status || 'Pending Diagnosis'}</span></td>
                         <td>
-                            <button class="btn-sm btn-view" onclick="viewClient('${client.Email}')">View</button>
+                            <button class="btn-sm btn-view" onclick="viewClient('${safeEmail}')">View</button>
                         </td>
                     </tr>`;
                 tbody.innerHTML += row;
@@ -291,21 +291,22 @@
 
         function filterTable(status, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
             if (status === 'all') renderTable(allClients);
             else renderTable(allClients.filter(c => c.Status === status));
         }
 
         function viewClient(email) {
-            const client = allClients.find(c => c.Email === email);
+            const client = allClients.find(c => (c.Email || '') === email);
             if (!client) return;
-            
+
             document.getElementById('drawerClientName').textContent = client.Name || 'Client Details';
-            
+
             let personalInfo = {};
-            try { personalInfo = JSON.parse(client.PersonalInfoJSON || '{}'); } catch(e) {}
-            
+            try { personalInfo = JSON.parse(client.PersonalInfoJSON || '{}'); } catch(e) { personalInfo = {}; }
+
             const body = document.getElementById('drawerBody');
+            if (!body) return;
             body.innerHTML = `
                 <div class="detail-section">
                     <h3>Workflow Stage</h3>
@@ -315,15 +316,15 @@
                 </div>
                 <div class="detail-section">
                     <h3>Contact Info</h3>
-                    <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${client.Email}</span></div>
+                    <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${client.Email || ''}</span></div>
                     <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value" dir="ltr">${personalInfo.phone || 'N/A'}</span></div>
                     <div class="detail-row"><span class="detail-label">Target Role</span><span class="detail-value">${client.TargetRole || 'N/A'}</span></div>
                 </div>
                 ${client.CVLink ? `
                 <div class="detail-section">
                     <h3>Documents</h3>
-                    <a href="${client.CVLink}" target="_blank" class="cv-link">📎 Download CV</a>
-                </div>` : '<div class="detail-section"><h3>Documents</h3><p style="color:var(--text-light); font-size:13px;">No CV uploaded.</p></div>'}
+                    <a href="${client.CVLink}" target="_blank" rel="noopener noreferrer" class="cv-link">📎 Download CV</a>
+                </div>` : `<div class="detail-section"><h3>Documents</h3><p style="color:var(--text-light); font-size:13px;">No CV uploaded.</p></div>`}
                 <div class="detail-section">
                     <h3>Internal Coach Notes</h3>
                     <textarea id="coachNotes" rows="5" placeholder="Add private notes about this client's progress...">${client.Notes || ''}</textarea>
@@ -337,52 +338,54 @@
         // ✅ FIXED: Removed Content-Type header
         async function updateWorkflow(email, newStatus) {
             try {
-                const response = await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus }) 
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus })
                 });
                 const result = await response.json();
-                
-                if (result.status === 'success') {
+
+                if (result && result.status === 'success') {
                     const client = allClients.find(c => c.Email === email);
-                    if(client) client.Status = newStatus;
-                    renderTable(allClients); 
+                    if (client) client.Status = newStatus;
+                    renderTable(allClients);
                     updateStats();
                 } else {
-                    throw new Error(result.message);
+                    throw new Error((result && result.message) || 'Unknown error');
                 }
-            } catch(err) {
+            } catch (err) {
                 console.error('Workflow update failed:', err);
-                alert('Failed to update status: ' + err.message);
+                alert('Failed to update status: ' + (err.message || err));
                 loadClients();
             }
         }
 
         // ✅ FIXED: Removed Content-Type header
         async function saveNotes(email) {
-            const notes = document.getElementById('coachNotes').value;
+            const notesEl = document.getElementById('coachNotes');
             const btn = document.getElementById('saveNotesBtn');
-            
-            btn.disabled = true; 
+            if (!notesEl || !btn) return;
+
+            const notes = notesEl.value;
+            btn.disabled = true;
             btn.textContent = 'Saving...';
-            
+
             try {
-                const response = await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes }) 
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes })
                 });
                 const result = await response.json();
-                
-                if (result.status === 'success') {
+
+                if (result && result.status === 'success') {
                     btn.textContent = '✅ Saved!';
                     setTimeout(() => { btn.textContent = 'Save Notes'; btn.disabled = false; }, 2000);
                 } else {
-                    throw new Error(result.message);
+                    throw new Error((result && result.message) || 'Save failed');
                 }
-            } catch(err) {
+            } catch (err) {
                 console.error('Notes save failed:', err);
-                alert('Failed to save notes: ' + err.message);
-                btn.textContent = 'Save Notes'; 
+                alert('Failed to save notes: ' + (err.message || err));
+                btn.textContent = 'Save Notes';
                 btn.disabled = false;
             }
         }
@@ -394,10 +397,11 @@
 
         function showReports() {
             const content = document.getElementById('reportsContent');
+            if (!content) return;
             const statusCounts = {};
             workflowStages.forEach(s => statusCounts[s.id] = 0);
-            allClients.forEach(c => { if(statusCounts[c.Status] !== undefined) statusCounts[c.Status]++; });
-            
+            allClients.forEach(c => { if (statusCounts[c.Status] !== undefined) statusCounts[c.Status]++; });
+
             const maxCount = Math.max(...Object.values(statusCounts), 1);
 
             content.innerHTML = `
@@ -424,7 +428,7 @@
             const headers = ['Name', 'Email', 'Status', 'Target Role'];
             const csv = [
                 headers.join(','),
-                ...allClients.map(c => [`"${c.Name || ''}"`, `"${c.Email}"`, `"${c.Status}"`, `"${c.TargetRole || ''}"`].join(','))
+                ...allClients.map(c => [`"${(c.Name || '').replace(/"/g, '""')}"`, `"${(c.Email || '').replace(/"/g, '""')}"`, `"${(c.Status || '').replace(/"/g, '""')}"`, `"${(c.TargetRole || '').replace(/"/g, '""')}"`].join(','))
             ].join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -433,7 +437,7 @@
             link.click();
         }
 
-        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkPassword(); });
+        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); checkPassword(); } });
     </script>
 </body>
 </html>
