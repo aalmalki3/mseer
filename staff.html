@@ -98,8 +98,8 @@
             <h2>Staff Access</h2>
             <p>Enter dashboard password to continue</p>
             <input type="password" id="passwordInput" placeholder="Password">
-            <button onclick="checkPassword()">Unlock Dashboard</button>
-            <p id="loginError">Incorrect password</p>
+            <button onclick="debugAuth()" style="margin-top:10px; padding:8px 16px; background:#666; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">🔍 Debug Auth</button>
+<p id="debugOutput" style="font-size:12px; color:#666; margin-top:10px; word-break:break-all; min-height:20px;"></p>
         </div>
     </div>
 
@@ -174,6 +174,23 @@
             { id: 'Completed', label: 'Completed', class: 'badge-completed' }
         ];
 
+async function debugAuth() {
+    var output = document.getElementById('debugOutput');
+    output.textContent = 'Testing...';
+    try {
+        var response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'authenticate', password: '1234' })
+        });
+        var result = await response.json();
+        output.textContent = 'Response: ' + JSON.stringify(result);
+        output.style.color = result.authenticated ? '#16A34A' : '#EF4444';
+    } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+        output.style.color = '#EF4444';
+    }
+}
+            
         // ✅ FIXED: Removed Content-Type header to prevent CORS preflight
         async function checkPassword() {
             const input = document.getElementById('passwordInput').value;
