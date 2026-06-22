@@ -22,7 +22,10 @@
         .login-box button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
         .login-box button:hover { background: var(--primary-hover); transform: translateY(-1px); }
         .login-box button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        /* ✅ ADDED: Missing login error element styles */
         #loginError { color: #991b1b; font-size: 14px; margin-top: 15px; display: none; font-weight: 500; }
+        #debugOutput { font-size: 12px; color: #666; margin-top: 10px; word-break: break-all; min-height: 20px; }
 
         .dashboard { display: none; max-width: 1200px; width: 100%; background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; flex-wrap: wrap; gap: 20px; }
@@ -92,14 +95,23 @@
     </style>
 </head>
 <body>
+    <!-- ✅ FIXED LOGIN BOX: Added missing #loginError and restored Unlock button -->
     <div id="loginOverlay">
         <div class="login-box">
             <img src="logo.jpeg" alt="Mseer Logo">
             <h2>Staff Access</h2>
             <p>Enter dashboard password to continue</p>
             <input type="password" id="passwordInput" placeholder="Password">
+            
+            <!-- Primary Login Button -->
+            <button onclick="checkPassword()">Unlock Dashboard</button>
+            
+            <!-- Debug Tools (Remove before production) -->
             <button onclick="debugAuth()" style="margin-top:10px; padding:8px 16px; background:#666; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">🔍 Debug Auth</button>
-<p id="debugOutput" style="font-size:12px; color:#666; margin-top:10px; word-break:break-all; min-height:20px;"></p>
+            
+            <!-- ✅ MISSING ELEMENT RESTORED -->
+            <p id="loginError">Incorrect password</p>
+            <p id="debugOutput"></p>
         </div>
     </div>
 
@@ -162,7 +174,7 @@
         </div>
     </div>
 
-        <script>
+    <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEy4sd8AxAr7xNc7NGa490GigFUm8z3NnafASpVQsarB1apO394k2SiqCK3vIzwtF4/exec';
         let allClients = [];
 
@@ -174,28 +186,35 @@
             { id: 'Completed', label: 'Completed', class: 'badge-completed' }
         ];
 
-async function debugAuth() {
-    var output = document.getElementById('debugOutput');
-    output.textContent = 'Testing...';
-    try {
-        var response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'authenticate', password: '1234' })
-        });
-        var result = await response.json();
-        output.textContent = 'Response: ' + JSON.stringify(result);
-        output.style.color = result.authenticated ? '#16A34A' : '#EF4444';
-    } catch (err) {
-        output.textContent = 'Error: ' + err.message;
-        output.style.color = '#EF4444';
-    }
-}
+        // Debug function for testing backend auth response
+        async function debugAuth() {
+            var output = document.getElementById('debugOutput');
+            output.textContent = 'Testing...';
+            try {
+                var response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'authenticate', password: '1234' })
+                });
+                var result = await response.json();
+                output.textContent = 'Response: ' + JSON.stringify(result);
+                output.style.color = result.authenticated ? '#16A34A' : '#EF4444';
+            } catch (err) {
+                output.textContent = 'Error: ' + err.message;
+                output.style.color = '#EF4444';
+            }
+        }
             
-        // ✅ FIXED: Removed Content-Type header to prevent CORS preflight
+        // ✅ FIXED: Safe DOM access + No Content-Type header
         async function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
+            const input = document.getElementById('passwordInput').value.trim();
             const btn = document.querySelector('.login-box button');
+            
+            // ✅ SAFETY CHECK: Prevents null reference error
             const errorMsg = document.getElementById('loginError');
+            if (!errorMsg) {
+                console.error('Critical: #loginError element missing from HTML');
+                return;
+            }
             
             btn.disabled = true; 
             btn.textContent = 'Verifying...';
@@ -204,13 +223,13 @@ async function debugAuth() {
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    // ⚠️ NO Content-Type header here
+                    // ⚠️ NO Content-Type header to prevent CORS preflight
                     body: JSON.stringify({ action: 'authenticate', password: input })
                 });
                 
                 const result = await response.json();
                 
-                if (result.authenticated) {
+                if (result.authenticated === true) {
                     document.getElementById('loginOverlay').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     loadClients();
@@ -320,7 +339,6 @@ async function debugAuth() {
             try {
                 const response = await fetch(SCRIPT_URL, { 
                     method: 'POST', 
-                    // ⚠️ NO Content-Type header here
                     body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus }) 
                 });
                 const result = await response.json();
@@ -351,7 +369,6 @@ async function debugAuth() {
             try {
                 const response = await fetch(SCRIPT_URL, { 
                     method: 'POST', 
-                    // ⚠️ NO Content-Type header here
                     body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes }) 
                 });
                 const result = await response.json();
