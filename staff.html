@@ -21,6 +21,7 @@
         .login-box input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(255,107,0,0.08); }
         .login-box button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
         .login-box button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .login-box button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         #loginError { color: #991b1b; font-size: 14px; margin-top: 15px; display: none; font-weight: 500; }
 
         .dashboard { display: none; max-width: 1200px; width: 100%; background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); }
@@ -163,7 +164,6 @@
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
-        const DASHBOARD_PASSWORD = '1234'; // ⚠️ CHANGE THIS IN PRODUCTION
         let allClients = [];
 
         const workflowStages = [
@@ -174,19 +174,45 @@
             { id: 'Completed', label: 'Completed', class: 'badge-completed' }
         ];
 
-        function checkPassword() {
-            if (document.getElementById('passwordInput').value === DASHBOARD_PASSWORD) {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadClients();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
+        // ✅ SECURE SERVER-SIDE AUTHENTICATION
+        async function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const btn = document.querySelector('.login-box button');
+            const errorMsg = document.getElementById('loginError');
+            
+            btn.disabled = true; 
+            btn.textContent = 'Verifying...';
+            errorMsg.style.display = 'none';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'authenticate', password: input })
+                });
+                
+                const result = await response.json();
+                
+                if (result.authenticated) {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadClients();
+                } else {
+                    errorMsg.textContent = 'Incorrect password';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Auth error:', err);
+                errorMsg.textContent = 'Network error. Please try again.';
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false; 
+                btn.textContent = 'Unlock Dashboard';
             }
         }
 
         async function loadClients() {
             try {
-                // Mocking data for demonstration if backend fails
                 const response = await fetch(`${SCRIPT_URL}?action=getClients`, { method: 'GET' });
                 const data = await response.json();
                 allClients = data.clients || [];
@@ -194,11 +220,7 @@
                 updateStats();
             } catch (err) { 
                 console.error('Failed to load clients:', err);
-                // Fallback mock data for UI testing
-                allClients = [
-                    { 'Client Name': 'Ahmed Ali', Email: 'ahmed@test.com', 'Service Type': 'Career Coaching', Status: 'In Analysis', 'Target Role': 'Marketing Manager', 'Attachments Link': '#' }
-                ];
-                renderTable(allClients); updateStats();
+                alert('Failed to load client data. Please refresh the page.');
             }
         }
 
@@ -213,9 +235,9 @@
             clients.forEach(client => {
                 const row = `
                     <tr>
-                        <td><strong>${client['Client Name']}</strong><br><small style="color:var(--text-light)">${client.Email}</small></td>
-                        <td>${client['Service Type'] || 'Career Diagnosis'}</td>
-                        <td>${client['Target Role'] || 'N/A'}</td>
+                        <td><strong>${client.Name || 'N/A'}</strong><br><small style="color:var(--text-light)">${client.Email}</small></td>
+                        <td>${client.Service || 'Career Diagnosis'}</td>
+                        <td>${client.TargetRole || 'N/A'}</td>
                         <td><span class="badge ${getBadgeClass(client.Status)}">${client.Status}</span></td>
                         <td>
                             <button class="btn-sm btn-view" onclick="viewClient('${client.Email}')">View</button>
@@ -238,13 +260,15 @@
             else renderTable(allClients.filter(c => c.Status === status));
         }
 
+        // ✅ UPDATED TO MATCH 17-COLUMN BACKEND HEADERS
         function viewClient(email) {
             const client = allClients.find(c => c.Email === email);
             if (!client) return;
-            document.getElementById('drawerClientName').textContent = client['Client Name'];
+            
+            document.getElementById('drawerClientName').textContent = client.Name || 'Client Details';
             
             let personalInfo = {};
-            try { personalInfo = JSON.parse(client['Personal Info'] || '{}'); } catch(e) {}
+            try { personalInfo = JSON.parse(client.PersonalInfoJSON || '{}'); } catch(e) {}
             
             const body = document.getElementById('drawerBody');
             body.innerHTML = `
@@ -258,34 +282,76 @@
                     <h3>Contact Info</h3>
                     <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${client.Email}</span></div>
                     <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value" dir="ltr">${personalInfo.phone || 'N/A'}</span></div>
-                    <div class="detail-row"><span class="detail-label">Target Role</span><span class="detail-value">${client['Target Role'] || 'N/A'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Target Role</span><span class="detail-value">${client.TargetRole || 'N/A'}</span></div>
                 </div>
-                ${client['Attachments Link'] ? `
+                ${client.CVLink ? `
                 <div class="detail-section">
                     <h3>Documents</h3>
-                    <a href="${client['Attachments Link']}" target="_blank" class="cv-link">📎 Download CV</a>
-                </div>` : ''}
+                    <a href="${client.CVLink}" target="_blank" class="cv-link">📎 Download CV</a>
+                </div>` : '<div class="detail-section"><h3>Documents</h3><p style="color:var(--text-light); font-size:13px;">No CV uploaded.</p></div>'}
                 <div class="detail-section">
                     <h3>Internal Coach Notes</h3>
                     <textarea id="coachNotes" rows="5" placeholder="Add private notes about this client's progress...">${client.Notes || ''}</textarea>
-                    <button class="btn-sm btn-action" style="margin-top:10px; width:100%;" onclick="saveNotes('${email}')">Save Notes</button>
+                    <button id="saveNotesBtn" class="btn-sm btn-action" style="margin-top:10px; width:100%;" onclick="saveNotes('${email}')">Save Notes</button>
                 </div>
             `;
             document.getElementById('drawerOverlay').classList.add('active');
             document.getElementById('clientDrawer').classList.add('active');
         }
 
+        // ✅ REMOVED no-cors & ADDED ERROR HANDLING
         async function updateWorkflow(email, newStatus) {
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus }) });
-            const client = allClients.find(c => c.Email === email);
-            if(client) client.Status = newStatus;
-            renderTable(allClients); updateStats();
+            try {
+                const response = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus }) 
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    const client = allClients.find(c => c.Email === email);
+                    if(client) client.Status = newStatus;
+                    renderTable(allClients); 
+                    updateStats();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch(err) {
+                console.error('Workflow update failed:', err);
+                alert('Failed to update status: ' + err.message);
+                loadClients(); // Revert UI to actual server state
+            }
         }
 
+        // ✅ REMOVED no-cors & ADDED BUTTON FEEDBACK
         async function saveNotes(email) {
             const notes = document.getElementById('coachNotes').value;
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes }) });
-            alert('Notes saved successfully');
+            const btn = document.getElementById('saveNotesBtn');
+            
+            btn.disabled = true; 
+            btn.textContent = 'Saving...';
+            
+            try {
+                const response = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes }) 
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    btn.textContent = '✅ Saved!';
+                    setTimeout(() => { btn.textContent = 'Save Notes'; btn.disabled = false; }, 2000);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch(err) {
+                console.error('Notes save failed:', err);
+                alert('Failed to save notes: ' + err.message);
+                btn.textContent = 'Save Notes'; 
+                btn.disabled = false;
+            }
         }
 
         function closeDrawer() {
@@ -321,11 +387,11 @@
         function closeReports() { document.getElementById('reportsModal').classList.remove('active'); }
 
         function exportToCSV() {
-            if (allClients.length === 0) return alert('No data');
+            if (allClients.length === 0) return alert('No data to export');
             const headers = ['Name', 'Email', 'Status', 'Target Role'];
             const csv = [
                 headers.join(','),
-                ...allClients.map(c => [`"${c['Client Name']}"`, `"${c.Email}"`, `"${c.Status}"`, `"${c['Target Role'] || ''}"`].join(','))
+                ...allClients.map(c => [`"${c.Name || ''}"`, `"${c.Email}"`, `"${c.Status}"`, `"${c.TargetRole || ''}"`].join(','))
             ].join('\n');
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
