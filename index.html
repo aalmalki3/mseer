@@ -106,7 +106,7 @@
           <label>سيرتك الذاتية القديمة (إن وجدت)</label>
           <div class="file-upload" onclick="document.getElementById('cvFile').click()">
             <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
-            <div class="file-label">📎 اضغط لرفع الملف (PDF / Word - حد أقصى 10MB)</div>
+            <div class="file-label">📎 اضغط لرفع الملف (PDF / Word - حد أقصى 5MB)</div>
           </div>
           <div class="file-preview-card" id="filePreview">
             <div class="file-icon" id="fileIcon">PDF</div>
@@ -116,7 +116,7 @@
             </div>
             <button type="button" class="remove-file" onclick="removeFile()">&times;</button>
           </div>
-          <span class="error-msg" id="file-error">نوع الملف غير مدعوم أو الحجم يتجاوز 10 ميجابايت</span>
+          <span class="error-msg" id="file-error">نوع الملف غير مدعوم أو الحجم يتجاوز 5 ميجابايت</span>
         </div>
         
         <div class="toggle-container" onclick="toggleManualEntry()">
@@ -158,7 +158,7 @@
     function autoSave() {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
-        delete data.cvFile; // Cannot save File object to localStorage
+        delete data.cvFile;
         localStorage.setItem('mseer_draft', JSON.stringify(data));
         autosaveMsg.classList.add('show');
         setTimeout(() => autosaveMsg.classList.remove('show'), 2000);
@@ -169,11 +169,13 @@
     window.addEventListener('load', () => {
         const saved = localStorage.getItem('mseer_draft');
         if (saved) {
-            const data = JSON.parse(saved);
-            Object.keys(data).forEach(key => {
-                const el = form.querySelector(`[name="${key}"]`);
-                if (el) el.value = data[key];
-            });
+            try {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(key => {
+                    const el = form.querySelector(`[name="${key}"]`);
+                    if (el) el.value = data[key];
+                });
+            } catch(e) { console.error('Failed to load draft:', e); }
         }
     });
 
@@ -223,8 +225,9 @@
             fileError.classList.add('show');
             fileInput.value = ''; return;
         }
-        if (file.size > 10 * 1024 * 1024) {
-            fileError.textContent = '❌ حجم الملف يتجاوز 10 ميجابايت';
+        // ✅ Reduced to 5MB to prevent GAS Base64 payload timeout
+        if (file.size > 5 * 1024 * 1024) {
+            fileError.textContent = '❌ حجم الملف يتجاوز 5 ميجابايت';
             fileError.classList.add('show');
             fileInput.value = ''; return;
         }
@@ -247,77 +250,101 @@
         document.getElementById('manualFields').style.display = isManual ? 'block' : 'none';
     }
 
-    // --- Form Submission ---
+    // --- ✅ FIXED Form Submission (No duplicate try/catch, No CORS preflight) ---
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const msg = document.getElementById('statusMsg');
+        const btn = document.getElementById('submitBtn');
+
         if (!validateSaudiPhone(phoneInput.value) || !validateEmail(emailInput.value)) {
-            document.getElementById('statusMsg').textContent = '❌ يرجى تصحيح الأخطاء في الحقولHighlighted';
-            document.getElementById('statusMsg').className = 'status-msg error';
+            msg.textContent = '❌ يرجى تصحيح الأخطاء في الحقول المميزة';
+            msg.className = 'status-msg error';
             return;
         }
 
-        const btn = document.getElementById('submitBtn');
-        const msg = document.getElementById('statusMsg');
-        btn.disabled = true; btn.textContent = 'جاري رفع الملفات والمعالجة...';
-        msg.style.display = 'none'; form.classList.add('loading');
-
-        const fd = new FormData(form);
-        const data = Object.fromEntries(fd.entries());
-        
-        let fileData = null, fileName = '';
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            fileName = file.name;
-            const reader = new FileReader();
-            await new Promise((resolve) => {
-                reader.onload = () => { fileData = reader.result.split(',')[1]; resolve(); };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
-        const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
-
-        const payload = {
-            name: data.name, phone: data.phone, email: data.email, city: data.city || '',
-            serviceType: 'Pending Diagnosis', 
-            currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', targetRole: '',
-            personalInfo: JSON.stringify({ name: data.name, phone: data.phone, email: data.email, city: data.city || '', major: data.major || '' }),
-            education: educationData, experience: expData, certifications: data.training || '', projects: data.projects || '',
-            fileName: fileName, fileContent: fileData
-        };
+        btn.disabled = true; 
+        btn.textContent = 'جاري رفع الملفات والمعالجة...';
+        msg.style.display = 'none'; 
+        form.classList.add('loading');
 
         try {
-    try {
-    const response = await fetch(SCRIPT_URL, { 
-        method: 'POST', 
-        // ✅ CHANGED: Removed Content-Type header to prevent CORS preflight
-        // Do NOT add mode: 'no-cors' here
-        body: JSON.stringify(payload) 
-    });
-    
-    const result = await response.json();
-    
-    if (result.status === 'success') {
-        msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
-        msg.className = 'status-msg success';
-        form.reset(); 
-        removeFile(); 
-        localStorage.removeItem('mseer_draft');
-        if(isManual) toggleManualEntry();
-    } else {
-        throw new Error(result.message || 'Server rejected request');
-    }
-} catch (error) { 
-    console.error('Submission failed:', error);
-    msg.textContent = '❌ حدث خطأ: ' + (error.message || 'يرجى المحاولة مرة أخرى');
-    msg.className = 'status-msg error'; 
-} finally { 
-    btn.disabled = false; 
-    btn.textContent = 'إرسال الطلب'; 
-    form.classList.remove('loading'); 
-}
+            const fd = new FormData(form);
+            const data = Object.fromEntries(fd.entries());
+            
+            // Base64 File Conversion
+            let fileData = null;
+            let fileName = '';
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileName = file.name;
+                const reader = new FileReader();
+                
+                await new Promise((resolve, reject) => {
+                    reader.onload = () => { 
+                        fileData = reader.result.split(',')[1]; 
+                        resolve(); 
+                    };
+                    reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
+            const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
+
+            const payload = {
+                name: data.name, 
+                phone: data.phone, 
+                email: data.email, 
+                city: data.city || '',
+                serviceType: 'Pending Diagnosis', 
+                currentRole: isManual ? (data.exp_last?.split('-')[0] || '') : '', 
+                targetRole: '',
+                personalInfo: JSON.stringify({ 
+                    name: data.name, 
+                    phone: data.phone, 
+                    email: data.email, 
+                    city: data.city || '', 
+                    major: data.major || '' 
+                }),
+                education: educationData, 
+                experience: expData, 
+                certifications: data.training || '', 
+                projects: data.projects || '',
+                fileName: fileName, 
+                fileContent: fileData
+            };
+
+            // ✅ NO Content-Type header = No CORS preflight = Works with GAS
+            const response = await fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: JSON.stringify(payload) 
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
+                msg.className = 'status-msg success';
+                form.reset(); 
+                removeFile(); 
+                localStorage.removeItem('mseer_draft');
+                if (isManual) toggleManualEntry();
+            } else {
+                throw new Error(result.message || 'Server rejected request');
+            }
+
+        } catch (error) { 
+            console.error('Submission failed:', error);
+            msg.textContent = '❌ حدث خطأ: ' + (error.message || 'يرجى المحاولة مرة أخرى');
+            msg.className = 'status-msg error'; 
+        } finally { 
+            btn.disabled = false; 
+            btn.textContent = 'إرسال الطلب'; 
+            form.classList.remove('loading'); 
+        }
     });
   </script>
 </body>
