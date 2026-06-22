@@ -289,10 +289,11 @@
         };
 
         try {
+    try {
     const response = await fetch(SCRIPT_URL, { 
         method: 'POST', 
-        // ⚠️ REMOVED mode: 'no-cors'
-        headers: {'Content-Type':'application/json'}, 
+        // ✅ CHANGED: Removed Content-Type header to prevent CORS preflight
+        // Do NOT add mode: 'no-cors' here
         body: JSON.stringify(payload) 
     });
     
@@ -301,7 +302,9 @@
     if (result.status === 'success') {
         msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
         msg.className = 'status-msg success';
-        form.reset(); removeFile(); localStorage.removeItem('mseer_draft');
+        form.reset(); 
+        removeFile(); 
+        localStorage.removeItem('mseer_draft');
         if(isManual) toggleManualEntry();
     } else {
         throw new Error(result.message || 'Server rejected request');
@@ -311,7 +314,9 @@
     msg.textContent = '❌ حدث خطأ: ' + (error.message || 'يرجى المحاولة مرة أخرى');
     msg.className = 'status-msg error'; 
 } finally { 
-    btn.disabled = false; btn.textContent = 'إرسال الطلب'; form.classList.remove('loading'); 
+    btn.disabled = false; 
+    btn.textContent = 'إرسال الطلب'; 
+    form.classList.remove('loading'); 
 }
     });
   </script>
