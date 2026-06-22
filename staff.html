@@ -162,7 +162,7 @@
         </div>
     </div>
 
-    <script>
+        <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzixWWfjhTYGADs1fSOgjtvmz_2F5zau7eDphMLtRL6hjVwzRyeU-Jia87XWP3aRDdu/exec';
         let allClients = [];
 
@@ -174,7 +174,7 @@
             { id: 'Completed', label: 'Completed', class: 'badge-completed' }
         ];
 
-        // ✅ SECURE SERVER-SIDE AUTHENTICATION
+        // ✅ FIXED: Removed Content-Type header to prevent CORS preflight
         async function checkPassword() {
             const input = document.getElementById('passwordInput').value;
             const btn = document.querySelector('.login-box button');
@@ -187,7 +187,7 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    // ⚠️ NO Content-Type header here
                     body: JSON.stringify({ action: 'authenticate', password: input })
                 });
                 
@@ -260,7 +260,6 @@
             else renderTable(allClients.filter(c => c.Status === status));
         }
 
-        // ✅ UPDATED TO MATCH 17-COLUMN BACKEND HEADERS
         function viewClient(email) {
             const client = allClients.find(c => c.Email === email);
             if (!client) return;
@@ -299,12 +298,12 @@
             document.getElementById('clientDrawer').classList.add('active');
         }
 
-        // ✅ REMOVED no-cors & ADDED ERROR HANDLING
+        // ✅ FIXED: Removed Content-Type header
         async function updateWorkflow(email, newStatus) {
             try {
                 const response = await fetch(SCRIPT_URL, { 
                     method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
+                    // ⚠️ NO Content-Type header here
                     body: JSON.stringify({ action: 'updateStatus', email: email, status: newStatus }) 
                 });
                 const result = await response.json();
@@ -320,11 +319,11 @@
             } catch(err) {
                 console.error('Workflow update failed:', err);
                 alert('Failed to update status: ' + err.message);
-                loadClients(); // Revert UI to actual server state
+                loadClients();
             }
         }
 
-        // ✅ REMOVED no-cors & ADDED BUTTON FEEDBACK
+        // ✅ FIXED: Removed Content-Type header
         async function saveNotes(email) {
             const notes = document.getElementById('coachNotes').value;
             const btn = document.getElementById('saveNotesBtn');
@@ -335,7 +334,7 @@
             try {
                 const response = await fetch(SCRIPT_URL, { 
                     method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
+                    // ⚠️ NO Content-Type header here
                     body: JSON.stringify({ action: 'updateNotes', email: email, notes: notes }) 
                 });
                 const result = await response.json();
