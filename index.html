@@ -4,350 +4,449 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mseer | ابدأ رحلتك المهنية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
+        :root {
             --primary: #FF6B00; --primary-hover: #E65C00; --bg: #FFF2D0; --card: #FFFFFF;
             --text: #1A1A1A; --text-light: #666666; --border: #F0EBE1; --error: #EF4444; --success: #16A34A;
         }
+        *, *::before, *::after { box-sizing: border-box; }
         body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+        /* --- Draft Banner --- */
+        .draft-banner { display: none; align-items: center; justify-content: space-between; gap: 12px; background: #FFF8F0; border: 1px solid var(--primary); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; width: 100%; max-width: 520px; font-size: 14px; }
+        .draft-banner.show { display: flex; }
+        .draft-banner-btns { display: flex; gap: 8px; flex-shrink: 0; }
+        .draft-banner button { padding: 6px 14px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: 'Tajawal', sans-serif; }
+        .btn-restore { background: var(--primary); color: white; }
+        .btn-discard { background: #F3F4F6; color: var(--text); }
+
         .header-row { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; max-width: 520px; margin-bottom: 12px; }
         .logo { max-width: 80px; height: auto; display: block; border-radius: 12px; flex-shrink: 0; }
         .header-row h2 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; }
         p.subtitle { margin: 0 0 30px; color: var(--text-light); font-size: 15px; line-height: 1.7; text-align: center; max-width: 520px; }
         .container { background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); width: 100%; max-width: 520px; text-align: center; }
-        @media (max-width: 480px) { .header-row { flex-direction: column; gap: 12px; } .header-row h2 { font-size: 24px; } .logo { max-width: 100px; } .container { padding: 25px; } }
-        
+        @media (max-width: 480px) { .header-row { flex-direction: column; gap: 12px; } .header-row h2 { font-size: 24px; } .logo { max-width: 100px; } .container { padding: 25px; } .draft-banner { flex-direction: column; align-items: flex-start; } }
+
         .form-group { margin-bottom: 20px; text-align: right; position: relative; }
         label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 14px; color: var(--text); }
-        input, select, textarea { 
-            width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; 
-            font-size: 15px; box-sizing: border-box; outline: none; transition: all 0.2s ease; 
-            background: #FAFAF8; font-family: 'Tajawal', sans-serif; 
+        input, select, textarea {
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
+            font-size: 15px; outline: none; transition: all 0.2s ease;
+            background: #FAFAF8; font-family: 'Tajawal', sans-serif;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08); }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(255,107,0,0.08); }
         input.invalid { border-color: var(--error); background: #FEF2F2; }
         input.valid { border-color: var(--success); }
-        
+
         .error-msg { color: var(--error); font-size: 12px; margin-top: 6px; display: none; font-weight: 500; text-align: right; }
         .error-msg.show { display: block; }
 
         .file-upload { border: 2px dashed #E5E0D8; border-radius: 14px; padding: 25px; cursor: pointer; transition: all 0.2s; background: #FAFAF8; margin-bottom: 15px; }
-        .file-upload:hover { border-color: var(--primary); background: #FFF8F0; }
-        .file-upload input { display: none; }
-        .file-label { color: var(--text-light); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        
+        .file-upload:hover, .file-upload:focus { border-color: var(--primary); background: #FFF8F0; outline: none; }
+        .file-upload input[type="file"] { display: none; }
+        .file-label { color: var(--text-light); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; pointer-events: none; }
+
         .file-preview-card { display: none; background: #FFF8F0; padding: 12px; border-radius: 12px; border: 1px solid #FFE0B2; align-items: center; gap: 12px; margin-top: 10px; text-align: right; }
         .file-preview-card.show { display: flex; }
-        .file-icon { background: var(--primary); color: white; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
-        .file-info { flex: 1; }
-        .file-info p { margin: 0; font-size: 13px; }
+        .file-icon { background: var(--primary); color: white; width: 36px; height: 36px; min-width: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+        .file-info { flex: 1; min-width: 0; }
+        .file-info p { margin: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .file-info .name { font-weight: 700; color: var(--text); }
         .file-info .size { color: var(--text-light); font-size: 11px; }
-        .remove-file { background: none; border: none; color: var(--error); cursor: pointer; font-size: 20px; padding: 0 5px; }
+        .remove-file { background: none; border: none; color: var(--error); cursor: pointer; font-size: 22px; padding: 0 4px; line-height: 1; flex-shrink: 0; }
 
-        .toggle-container { display: flex; align-items: center; justify-content: center; margin: 25px 0; font-size: 14px; color: var(--text-light); cursor: pointer; user-select: none; gap: 12px; }
-        .toggle-switch { width: 44px; height: 24px; background: #E5E0D8; border-radius: 20px; position: relative; transition: 0.3s; }
-        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .toggle-container { display: flex; align-items: center; justify-content: center; margin: 25px 0; font-size: 14px; color: var(--text-light); cursor: pointer; user-select: none; gap: 12px; border-radius: 8px; padding: 4px; }
+        .toggle-container:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .toggle-switch { width: 44px; height: 24px; background: #E5E0D8; border-radius: 20px; position: relative; transition: 0.3s; flex-shrink: 0; }
+        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
         .toggle-active .toggle-switch { background: var(--primary); }
         .toggle-active .toggle-switch::after { transform: translateX(20px); }
-        
+
         #manualFields { display: none; text-align: right; animation: slideDown 0.3s ease forwards; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         .section-title { font-size: 15px; font-weight: 700; color: var(--primary); margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border); text-align: right; }
-        
-        button[type="submit"] { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.12s ease; }
-        button[type="submit"]:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        button[type="submit"] { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.12s ease; font-family: 'Tajawal', sans-serif; margin-top: 8px; }
+        button[type="submit"]:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
         button[type="submit"]:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        
-        .status-msg { margin-top: 20px; padding: 14px; border-radius: 10px; font-size: 14px; display: none; font-weight: 500; }
-        .success { background: #DCFCE7; color: #166534; display: block !important; }
-        .error { background: #FEE2E2; color: #991B1B; display: block !important; }
-        .loading { opacity: 0.7; pointer-events: none; }
-        
+
+        /* Use distinct classes to avoid specificity conflicts */
+        .status-msg { margin-top: 20px; padding: 14px; border-radius: 10px; font-size: 14px; display: none; font-weight: 500; text-align: center; }
+        .status-msg.msg-success { background: #DCFCE7; color: #166534; display: block; }
+        .status-msg.msg-error { background: #FEE2E2; color: #991B1B; display: block; }
+        .form-loading { opacity: 0.7; pointer-events: none; }
+
         .autosave-indicator { font-size: 11px; color: var(--text-light); margin-top: 10px; opacity: 0; transition: opacity 0.3s; }
         .autosave-indicator.show { opacity: 1; }
+
+        /* Honeypot — completely invisible to humans */
+        .hp-wrap { display: none !important; }
     </style>
 </head>
 <body>
 
+  <!-- Draft Restore Banner -->
+  <div class="draft-banner" id="draftBanner" role="alert" aria-live="polite">
+    <span>📝 وجدنا مسودة محفوظة — هل تريد استعادتها؟</span>
+    <div class="draft-banner-btns">
+      <button type="button" class="btn-restore" onclick="restoreDraft()">استعادة</button>
+      <button type="button" class="btn-discard" onclick="discardDraft()">تجاهل</button>
+    </div>
+  </div>
+
   <div class="header-row">
-    <img src="logo.jpeg" alt="Mseer Logo" class="logo">
+    <img src="logo.jpeg" alt="شعار مسير" class="logo">
     <h2>ابدأ رحلتك المهنية</h2>
   </div>
   <p class="subtitle">أرسل لنا سيرتك الذاتية أو بياناتك، وسنقوم بتحليل مسارك وتقديم الخطة الأنسب لك.</p>
 
   <div class="container">
     <form id="intakeForm" novalidate>
+
+      <!-- Honeypot: hidden from real users, bots fill it — backend silently discards -->
+      <div class="hp-wrap" aria-hidden="true">
+        <input type="text" name="_hp" tabindex="-1" autocomplete="off">
+      </div>
+
       <div class="form-group">
         <label for="name">الاسم الكامل *</label>
-        <input type="text" id="name" name="name" required placeholder="الاسم الثلاثي" aria-required="true">
+        <input type="text" id="name" name="name" required placeholder="الاسم الثلاثي"
+               autocomplete="name" aria-required="true">
       </div>
-      
+
       <div class="form-group">
         <label for="phone">رقم التواصل (واتساب) *</label>
-        <input type="tel" id="phone" name="phone" required placeholder="05xxxxxxxx" style="direction: ltr; text-align: right;" aria-required="true" aria-describedby="phone-error">
-        <span class="error-msg" id="phone-error">يجب أن يكون الرقم بصيغة 05xxxxxxxx (10 أرقام)</span>
+        <input type="tel" id="phone" name="phone" required
+               placeholder="05xxxxxxxx أو +9665xxxxxxxx"
+               style="direction:ltr; text-align:right;"
+               autocomplete="tel" aria-required="true" aria-describedby="phone-error">
+        <span class="error-msg" id="phone-error">يجب أن يكون الرقم سعودياً صحيحاً (05xxxxxxxx)</span>
       </div>
-      
+
       <div class="form-group">
         <label for="email">البريد الإلكتروني *</label>
-        <input type="email" id="email" name="email" required placeholder="example@email.com" style="direction: ltr; text-align: right;" aria-required="true" aria-describedby="email-error">
+        <input type="email" id="email" name="email" required
+               placeholder="example@email.com"
+               style="direction:ltr; text-align:right;"
+               autocomplete="email" aria-required="true" aria-describedby="email-error">
         <span class="error-msg" id="email-error">يرجى إدخال بريد إلكتروني صحيح</span>
       </div>
-      
+
       <div class="form-group">
         <label for="city">المدينة</label>
-        <input type="text" id="city" name="city" placeholder="الرياض، جدة...">
+        <input type="text" id="city" name="city" placeholder="الرياض، جدة..."
+               autocomplete="address-level2">
       </div>
-      
-      <div id="uploadSection">
+
+      <!-- File upload — hidden when manual mode is active -->
+      <div id="fileSection">
         <div class="form-group">
           <label>سيرتك الذاتية القديمة (إن وجدت)</label>
-          <div class="file-upload" onclick="document.getElementById('cvFile').click()">
+          <div class="file-upload" role="button" tabindex="0"
+               onclick="document.getElementById('cvFile').click()"
+               onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('cvFile').click()">
             <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx">
-            <div class="file-label">📎 اضغط لرفع الملف (PDF / Word - حد أقصى 5MB)</div>
+            <div class="file-label">📎 اضغط لرفع الملف (PDF / Word — حد أقصى 5MB)</div>
           </div>
           <div class="file-preview-card" id="filePreview">
-            <div class="file-icon" id="fileIcon">PDF</div>
+            <div class="file-icon" id="fileIcon"></div>
             <div class="file-info">
-              <p class="name" id="fileNameText">document.pdf</p>
-              <p class="size" id="fileSizeText">1.2 MB</p>
+              <p class="name" id="fileNameText"></p>
+              <p class="size" id="fileSizeText"></p>
             </div>
-            <button type="button" class="remove-file" onclick="removeFile()">&times;</button>
+            <button type="button" class="remove-file" aria-label="إزالة الملف" onclick="removeFile()">&times;</button>
           </div>
-          <span class="error-msg" id="file-error">نوع الملف غير مدعوم أو الحجم يتجاوز 5 ميجابايت</span>
-        </div>
-        
-        <div class="toggle-container" onclick="toggleManualEntry()">
-          <span>ليس لدي سيرة ذاتية</span>
-          <div class="toggle-switch" id="toggleSwitch" aria-hidden="true"></div>
-          <span>إدخال البيانات يدوياً</span>
+          <span class="error-msg" id="file-error"></span>
         </div>
       </div>
 
+      <!-- Toggle -->
+      <div class="toggle-container" id="toggleContainer"
+           role="switch" tabindex="0" aria-checked="false"
+           onclick="toggleManualEntry()"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleManualEntry();}">
+        <span>ليس لدي سيرة ذاتية</span>
+        <div class="toggle-switch" aria-hidden="true"></div>
+        <span>إدخال البيانات يدوياً</span>
+      </div>
+
+      <!-- Manual fields — shown only when toggle is active -->
       <div id="manualFields">
         <div class="section-title">المعلومات الشخصية الإضافية</div>
-        <div class="form-group"><label>التخصص الأكاديمي</label><input type="text" name="major" placeholder="مثال: إدارة أعمال"></div>
+        <div class="form-group">
+          <label for="major">التخصص الأكاديمي</label>
+          <input type="text" id="major" name="major" placeholder="مثال: إدارة أعمال">
+        </div>
+
         <div class="section-title">الشهادات الأكاديمية</div>
-        <div class="form-group"><label>الدرجة العلمية</label><input type="text" name="edu_degree" placeholder="بكالوريوس، ماجستير..."></div>
-        <div class="form-group"><label>جهة الإصدار & تاريخ التخرج</label><input type="text" name="edu_details" placeholder="جامعة الملك سعود - 2020"></div>
+        <div class="form-group">
+          <label for="edu_degree">الدرجة العلمية</label>
+          <input type="text" id="edu_degree" name="edu_degree" placeholder="بكالوريوس، ماجستير...">
+        </div>
+        <div class="form-group">
+          <label for="edu_details">جهة الإصدار &amp; تاريخ التخرج</label>
+          <input type="text" id="edu_details" name="edu_details" placeholder="جامعة الملك سعود - 2020">
+        </div>
+
         <div class="section-title">الخبرات العملية</div>
-        <div class="form-group"><label>آخر مسمى وظيفي & جهة العمل</label><input type="text" name="exp_last" placeholder="مسوق رقمي - شركة الأفق"></div>
-        <div class="form-group"><label>تاريخ البداية والنهاية</label><input type="text" name="exp_dates" placeholder="يناير 2021 - حتى الآن"></div>
+        <div class="form-group">
+          <label for="exp_last">آخر مسمى وظيفي &amp; جهة العمل</label>
+          <input type="text" id="exp_last" name="exp_last" placeholder="مسوق رقمي - شركة الأفق">
+        </div>
+        <div class="form-group">
+          <label for="exp_dates">تاريخ البداية والنهاية</label>
+          <input type="text" id="exp_dates" name="exp_dates" placeholder="يناير 2021 - حتى الآن">
+        </div>
+
         <div class="section-title">التدريب والشهادات</div>
-        <div class="form-group"><label>أبرز الدورات أو التدريب</label><textarea name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea></div>
+        <div class="form-group">
+          <label for="training">أبرز الدورات أو التدريب</label>
+          <textarea id="training" name="training" rows="2" placeholder="اسم الدورة، الجهة، التاريخ"></textarea>
+        </div>
+
         <div class="section-title">المشاريع والعمل التطوعي</div>
-        <div class="form-group"><label>تفاصيل المشاريع أو التطوع</label><textarea name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea></div>
+        <div class="form-group">
+          <label for="projects">تفاصيل المشاريع أو التطوع</label>
+          <textarea id="projects" name="projects" rows="2" placeholder="وصف مختصر للمشاريع السابقة"></textarea>
+        </div>
       </div>
-      
+
       <button type="submit" id="submitBtn">إرسال الطلب</button>
-      <div id="statusMsg" class="status-msg"></div>
-      <div class="autosave-indicator" id="autosaveMsg">✅ تم حفظ المسودة تلقائياً</div>
+      <div id="statusMsg" class="status-msg" role="alert" aria-live="assertive"></div>
+      <div class="autosave-indicator" id="autosaveMsg" aria-live="polite">✅ تم حفظ المسودة تلقائياً</div>
     </form>
   </div>
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpMDGM09varSi_2FbE-sBAomvioyeaH6Sy0pGjGlrqPUemTsl7sAyo_AGkaznZDY7l/exec';
     let isManual = false;
+    let autosaveTimer = null;
 
-    // --- Auto-Save Logic ---
-    const form = document.getElementById('intakeForm');
+    const form        = document.getElementById('intakeForm');
     const autosaveMsg = document.getElementById('autosaveMsg');
-    
+    const phoneInput  = document.getElementById('phone');
+    const emailInput  = document.getElementById('email');
+    const phoneError  = document.getElementById('phone-error');
+    const emailError  = document.getElementById('email-error');
+    const fileInput   = document.getElementById('cvFile');
+    const filePreview = document.getElementById('filePreview');
+    const fileError   = document.getElementById('file-error');
+
+    // ─── Phone helpers ───────────────────────────────────────────────────────
+    function normalizePhone(raw) {
+      let p = (raw || '').trim().replace(/\s+/g, '');
+      if (p.startsWith('+966'))  p = '0' + p.slice(4);
+      if (p.startsWith('00966')) p = '0' + p.slice(5);
+      // e.g. 9665xxxxxxxx (12 digits, no leading 0)
+      if (/^9665\d{8}$/.test(p)) p = '0' + p.slice(3);
+      return p;
+    }
+    const isValidPhone = (raw) => /^05\d{8}$/.test(normalizePhone(raw));
+    const isValidEmail = (e)   => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((e || '').trim());
+
+    // ─── Draft Logic ─────────────────────────────────────────────────────────
     function autoSave() {
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => {
+        const fd = new FormData(form);
+        const data = Object.fromEntries(fd.entries());
         delete data.cvFile;
+        delete data._hp;
         localStorage.setItem('mseer_draft', JSON.stringify(data));
         autosaveMsg.classList.add('show');
         setTimeout(() => autosaveMsg.classList.remove('show'), 2000);
+      }, 800);
     }
-
     form.addEventListener('input', autoSave);
 
     window.addEventListener('load', () => {
-        const saved = localStorage.getItem('mseer_draft');
-        if (saved) {
-            try {
-                const data = JSON.parse(saved);
-                Object.keys(data).forEach(key => {
-                    const el = form.querySelector(`[name="${key}"]`);
-                    if (el) el.value = data[key];
-                });
-            } catch(e) { console.error('Failed to load draft:', e); }
-        }
+      const saved = localStorage.getItem('mseer_draft');
+      if (saved) {
+        try { JSON.parse(saved); document.getElementById('draftBanner').classList.add('show'); }
+        catch (e) { localStorage.removeItem('mseer_draft'); }
+      }
     });
 
-    // --- Validation Logic ---
-    const phoneInput = document.getElementById('phone');
-    const emailInput = document.getElementById('email');
-    const phoneError = document.getElementById('phone-error');
-    const emailError = document.getElementById('email-error');
+    function restoreDraft() {
+      try {
+        const data = JSON.parse(localStorage.getItem('mseer_draft') || '{}');
+        Object.keys(data).forEach(key => {
+          const el = form.querySelector(`[name="${key}"]`);
+          if (el && key !== '_hp') el.value = data[key];
+        });
+      } catch (e) { console.error('Draft restore failed:', e); }
+      document.getElementById('draftBanner').classList.remove('show');
+    }
 
-    const validateSaudiPhone = (phone) => /^05\d{8}$/.test(phone.trim());
-    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    function discardDraft() {
+      localStorage.removeItem('mseer_draft');
+      document.getElementById('draftBanner').classList.remove('show');
+    }
 
+    // ─── Validation ──────────────────────────────────────────────────────────
     phoneInput.addEventListener('blur', () => {
-        if (phoneInput.value && !validateSaudiPhone(phoneInput.value)) {
-            phoneInput.classList.add('invalid'); phoneInput.classList.remove('valid');
-            phoneError.classList.add('show');
-        } else if (phoneInput.value) {
-            phoneInput.classList.remove('invalid'); phoneInput.classList.add('valid');
-            phoneError.classList.remove('show');
-        }
+      if (!phoneInput.value) return;
+      if (!isValidPhone(phoneInput.value)) {
+        phoneInput.classList.add('invalid'); phoneInput.classList.remove('valid');
+        phoneError.classList.add('show');
+      } else {
+        phoneInput.value = normalizePhone(phoneInput.value); // auto-format
+        phoneInput.classList.remove('invalid'); phoneInput.classList.add('valid');
+        phoneError.classList.remove('show');
+      }
     });
 
     emailInput.addEventListener('blur', () => {
-        if (emailInput.value && !validateEmail(emailInput.value)) {
-            emailInput.classList.add('invalid'); emailInput.classList.remove('valid');
-            emailError.classList.add('show');
-        } else if (emailInput.value) {
-            emailInput.classList.remove('invalid'); emailInput.classList.add('valid');
-            emailError.classList.remove('show');
-        }
+      if (!emailInput.value) return;
+      if (!isValidEmail(emailInput.value)) {
+        emailInput.classList.add('invalid'); emailInput.classList.remove('valid');
+        emailError.classList.add('show');
+      } else {
+        emailInput.classList.remove('invalid'); emailInput.classList.add('valid');
+        emailError.classList.remove('show');
+      }
     });
 
-    // --- File Handling ---
-    const fileInput = document.getElementById('cvFile');
-    const filePreview = document.getElementById('filePreview');
-    const fileError = document.getElementById('file-error');
+    // ─── File Handling ───────────────────────────────────────────────────────
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      fileError.textContent = '';
+      fileError.classList.remove('show');
+      if (!file) { removeFile(); return; }
 
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        fileError.classList.remove('show');
-        
-        if (!file) { removeFile(); return; }
-
-        const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-        if (!validTypes.includes(file.type) && !file.name.match(/\.(pdf|doc|docx)$/i)) {
-            fileError.textContent = '❌ يرجى رفع ملف PDF أو Word فقط';
-            fileError.classList.add('show');
-            fileInput.value = ''; return;
-        }
-        // ✅ Reduced to 5MB to prevent GAS Base64 payload timeout
-        if (file.size > 5 * 1024 * 1024) {
-            fileError.textContent = '❌ حجم الملف يتجاوز 5 ميجابايت';
-            fileError.classList.add('show');
-            fileInput.value = ''; return;
-        }
-
-        document.getElementById('fileNameText').textContent = file.name;
-        document.getElementById('fileSizeText').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-        document.getElementById('fileIcon').textContent = file.name.split('.').pop().toUpperCase();
-        filePreview.classList.add('show');
+      const validTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ];
+      if (!validTypes.includes(file.type) && !/\.(pdf|doc|docx)$/i.test(file.name)) {
+        fileError.textContent = '❌ يرجى رفع ملف PDF أو Word فقط';
+        fileError.classList.add('show');
+        fileInput.value = ''; return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        fileError.textContent = '❌ حجم الملف يتجاوز 5 ميجابايت';
+        fileError.classList.add('show');
+        fileInput.value = ''; return;
+      }
+      const ext = file.name.split('.').pop().toUpperCase().slice(0, 4);
+      document.getElementById('fileIcon').textContent     = ext;
+      document.getElementById('fileNameText').textContent = file.name;
+      document.getElementById('fileSizeText').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+      filePreview.classList.add('show');
     });
 
     function removeFile() {
-        fileInput.value = '';
-        filePreview.classList.remove('show');
+      fileInput.value = '';
+      filePreview.classList.remove('show');
+      document.getElementById('fileIcon').textContent     = '';
+      document.getElementById('fileNameText').textContent = '';
+      document.getElementById('fileSizeText').textContent = '';
+      fileError.classList.remove('show');
     }
 
-    // --- Toggle Manual Entry ---
+    // ─── Toggle Manual Entry ─────────────────────────────────────────────────
     function toggleManualEntry() {
-        isManual = !isManual;
-        document.querySelector('.toggle-container').classList.toggle('toggle-active', isManual);
-        document.getElementById('manualFields').style.display = isManual ? 'block' : 'none';
+      isManual = !isManual;
+      const toggle = document.getElementById('toggleContainer');
+      toggle.classList.toggle('toggle-active', isManual);
+      toggle.setAttribute('aria-checked', String(isManual));
+      document.getElementById('manualFields').style.display = isManual ? 'block' : 'none';
+      document.getElementById('fileSection').style.display  = isManual ? 'none'  : 'block';
+      if (!isManual) removeFile();
     }
 
-    // --- ✅ FIXED Form Submission (No duplicate try/catch, No CORS preflight) ---
+    // ─── Form Submission ─────────────────────────────────────────────────────
     form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const msg = document.getElementById('statusMsg');
-        const btn = document.getElementById('submitBtn');
+      e.preventDefault();
+      const msg = document.getElementById('statusMsg');
+      const btn = document.getElementById('submitBtn');
 
-        if (!validateSaudiPhone(phoneInput.value) || !validateEmail(emailInput.value)) {
-            msg.textContent = '❌ يرجى تصحيح الأخطاء في الحقول المميزة';
-            msg.className = 'status-msg error';
-            msg.style.display = 'block';
-            return;
+      function showMsg(text, type) {
+        msg.textContent = text;
+        msg.className = `status-msg msg-${type}`;
+      }
+
+      // Client-side validation
+      if (!document.getElementById('name').value.trim()) {
+        return showMsg('❌ يرجى إدخال الاسم الكامل', 'error');
+      }
+      if (!isValidPhone(phoneInput.value)) {
+        phoneInput.classList.add('invalid');
+        phoneError.classList.add('show');
+        return showMsg('❌ يرجى تصحيح رقم الجوال', 'error');
+      }
+      if (!isValidEmail(emailInput.value)) {
+        emailInput.classList.add('invalid');
+        emailError.classList.add('show');
+        return showMsg('❌ يرجى تصحيح البريد الإلكتروني', 'error');
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري الإرسال...';
+      msg.className = 'status-msg';
+      form.classList.add('form-loading');
+
+      try {
+        const fd = new FormData(form);
+        const data = Object.fromEntries(fd.entries());
+
+        // Base64-encode file if present
+        let fileData = null, fileName = '';
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          fileName = file.name;
+          await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload  = () => { fileData = reader.result.split(',')[1]; resolve(); };
+            reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+            reader.readAsDataURL(file);
+          });
         }
 
-        btn.disabled = true; 
-        btn.textContent = 'جاري رفع الملفات والمعالجة...';
-        msg.style.display = 'none'; 
-        form.classList.add('loading');
+        const normalizedPhone = normalizePhone(data.phone);
+        const educationData   = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
+        const expData         = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
 
-        try {
-            const fd = new FormData(form);
-            const data = Object.fromEntries(fd.entries());
-            
-            // Base64 File Conversion
-            let fileData = null;
-            let fileName = '';
-            
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fileName = file.name;
-                const reader = new FileReader();
-                
-                await new Promise((resolve, reject) => {
-                    reader.onload = () => { 
-                        fileData = reader.result.split(',')[1]; 
-                        resolve(); 
-                    };
-                    reader.onerror = () => reject(new Error('فشل قراءة الملف'));
-                    reader.readAsDataURL(file);
-                });
-            }
+        const payload = {
+          name:         data.name,
+          phone:        normalizedPhone,
+          email:        data.email,
+          city:         data.city         || '',
+          serviceType:  'Pending Diagnosis',
+          currentRole:  isManual && data.exp_last ? data.exp_last.split('-')[0].trim() : '',
+          targetRole:   '',
+          personalInfo: JSON.stringify({ name: data.name, phone: normalizedPhone, email: data.email, city: data.city || '', major: data.major || '' }),
+          education:    educationData,
+          experience:   expData,
+          certifications: data.training  || '',
+          projects:     data.projects    || '',
+          fileName,
+          fileContent:  fileData,
+          _hp:          data._hp         || '' // honeypot forwarded to backend
+        };
 
-            const educationData = isManual ? JSON.stringify([{ degree: data.edu_degree || '', details: data.edu_details || '' }]) : '';
-            const expData = isManual ? JSON.stringify([{ role: data.exp_last || '', dates: data.exp_dates || '' }]) : '';
+        const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const result   = await response.json();
 
-            const payload = {
-                name: data.name, 
-                phone: data.phone, 
-                email: data.email, 
-                city: data.city || '',
-                serviceType: 'Pending Diagnosis', 
-                currentRole: isManual ? (data.exp_last ? data.exp_last.split('-')[0].trim() : '') : '', 
-                targetRole: '',
-                personalInfo: JSON.stringify({ 
-                    name: data.name, 
-                    phone: data.phone, 
-                    email: data.email, 
-                    city: data.city || '', 
-                    major: data.major || '' 
-                }),
-                education: educationData, 
-                experience: expData, 
-                certifications: data.training || '', 
-                projects: data.projects || '',
-                fileName: fileName, 
-                fileContent: fileData
-            };
-
-            // ✅ NO Content-Type header = No CORS preflight = Works with GAS
-            const response = await fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                body: JSON.stringify(payload) 
-            });
-            
-            const result = await response.json();
-
-            if (result && result.status === 'success') {
-                msg.textContent = '✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب';
-                msg.className = 'status-msg success';
-                msg.style.display = 'block';
-                form.reset(); 
-                removeFile(); 
-                localStorage.removeItem('mseer_draft');
-                if (isManual) toggleManualEntry();
-            } else {
-                throw new Error((result && result.message) || 'Server rejected request');
-            }
-
-        } catch (error) { 
-            console.error('Submission failed:', error);
-            msg.textContent = '❌ حدث خطأ: ' + (error.message || 'يرجى المحاولة مرة أخرى');
-            msg.className = 'status-msg error'; 
-            msg.style.display = 'block';
-        } finally { 
-            btn.disabled = false; 
-            btn.textContent = 'إرسال الطلب'; 
-            form.classList.remove('loading'); 
+        if (result && result.status === 'success') {
+          showMsg('✅ تم الاستلام بنجاح! سنتواصل معك قريباً عبر الواتساب', 'success');
+          form.reset();
+          removeFile();
+          localStorage.removeItem('mseer_draft');
+          if (isManual) toggleManualEntry();
+        } else {
+          throw new Error((result && result.message) || 'طلب مرفوض من الخادم');
         }
+      } catch (err) {
+        console.error('Submission failed:', err);
+        showMsg('❌ حدث خطأ: ' + (err.message || 'يرجى المحاولة مرة أخرى'), 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'إرسال الطلب';
+        form.classList.remove('form-loading');
+      }
     });
   </script>
 </body>
